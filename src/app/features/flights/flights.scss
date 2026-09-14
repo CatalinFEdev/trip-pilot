@@ -1,0 +1,119 @@
+.search-card {
+  background: #fff;
+  padding: 8px;
+  margin-top: -60px;
+  position: relative;
+  z-index: 2;
+  border-top: 4px solid var(--tp-yellow);
+}
+
+.search-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+  align-items: start;
+  padding: 12px;
+}
+
+.search-form__narrow {
+  max-width: 220px;
+}
+
+.search-form__submit {
+  height: 56px;
+  align-self: start;
+}
+
+.results__title {
+  margin: 36px 0 16px;
+}
+
+.results {
+  display: grid;
+  gap: 12px;
+}
+
+.offer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 20px;
+  background: #fff;
+  border-left: 4px solid var(--tp-blue-600);
+
+  &:hover {
+    border-left-color: var(--tp-yellow);
+  }
+}
+
+.offer__main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 28px;
+  flex: 1 1 420px;
+}
+
+.offer__airline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 160px;
+
+  mat-icon {
+    color: var(--tp-blue-600);
+  }
+
+  strong {
+    display: block;
+    color: var(--tp-blue-900);
+  }
+
+  small {
+    color: color-mix(in srgb, var(--tp-blue-900) 60%, transparent);
+    font-size: 12px;
+  }
+}
+
+.offer__times {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+
+  strong {
+    display: block;
+    font-size: 18px;
+    color: var(--tp-blue-900);
+  }
+
+  small {
+    font-size: 12px;
+    color: color-mix(in srgb, var(--tp-blue-900) 60%, transparent);
+  }
+}
+
+.offer__line {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+  color: color-mix(in srgb, var(--tp-blue-900) 60%, transparent);
+
+  mat-icon {
+    color: var(--tp-blue-500);
+  }
+}
+
+.offer__cta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.offer__price {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--tp-blue-900);
+}

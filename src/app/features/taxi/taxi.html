@@ -1,0 +1,77 @@
+<section class="page-head tp-brand-surface">
+  <div class="page-head__inner">
+    <span class="page-head__badge">Coming soon</span>
+    <h1><mat-icon>local_taxi</mat-icon> Airport pick-up</h1>
+    <p>
+      A taxi waiting at arrivals the moment you land. Not live yet — join the waitlist and we will
+      switch it on for you first.
+    </p>
+  </div>
+</section>
+
+<div class="tp-section taxi">
+  <div class="taxi__grid">
+    <div>
+      <h2 class="tp-section-title">What we are building</h2>
+      <ul class="roadmap">
+        @for (item of roadmap; track item.text) {
+          <li>
+            <mat-icon>{{ item.icon }}</mat-icon>
+            {{ item.text }}
+          </li>
+        }
+      </ul>
+    </div>
+
+    <mat-card appearance="outlined" class="waitlist-card">
+      <mat-card-content>
+        <h3>Join the waitlist</h3>
+        <form [formGroup]="form" (ngSubmit)="submit()" class="waitlist-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Arrival airport</mat-label>
+            <input matInput formControlName="airport" placeholder="e.g. OTP" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Drop-off address</mat-label>
+            <input matInput formControlName="dropOffAddress" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Pick-up time</mat-label>
+            <input matInput type="datetime-local" formControlName="pickUpTime" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Passengers</mat-label>
+            <input matInput type="number" min="1" formControlName="passengers" />
+          </mat-form-field>
+
+          <button matButton="filled" class="tp-yellow-button" type="submit">
+            <mat-icon>notifications_active</mat-icon>
+            Notify me
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  @if (waitlist().length) {
+    <h2 class="tp-section-title requests__title">Your requests</h2>
+    <div class="requests">
+      @for (quote of waitlist(); track quote.id) {
+        <mat-card appearance="outlined" class="request">
+          <mat-icon>local_taxi</mat-icon>
+          <div>
+            <strong>{{ quote.airport }} → {{ quote.dropOffAddress }}</strong>
+            <small>
+              {{ quote.pickUpTime | date: 'medium' }} · {{ quote.passengers }} passenger(s) ·
+              approx. €{{ quote.estimatedPriceEur }}
+            </small>
+          </div>
+          <span class="request__status">Waitlisted</span>
+        </mat-card>
+      }
+    </div>
+  }
+</div>

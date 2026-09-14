@@ -1,0 +1,118 @@
+<section class="assistant">
+  <header class="assistant__header tp-brand-surface">
+    <div class="assistant__title">
+      <mat-icon>auto_awesome</mat-icon>
+      <div>
+        <strong>Trip assistant</strong>
+        <small>AG-UI protocol</small>
+      </div>
+      <button
+        matIconButton
+        type="button"
+        aria-label="Start a new conversation"
+        matTooltip="New conversation"
+        (click)="agui.reset()"
+      >
+        <mat-icon>restart_alt</mat-icon>
+      </button>
+    </div>
+
+    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="assistant__model">
+      <mat-label>Model</mat-label>
+      <mat-select
+        [value]="agui.providerId()"
+        (valueChange)="agui.selectProvider($event)"
+        [disabled]="agui.isRunning()"
+      >
+        @for (provider of agui.providers; track provider.id) {
+          <mat-option [value]="provider.id">
+            {{ provider.vendor }} · {{ provider.model }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </header>
+
+  <div class="assistant__accent tp-accent-bar"></div>
+
+  @if (agui.isRunning()) {
+    <mat-progress-bar mode="indeterminate" />
+  }
+
+  <div class="assistant__scroll" #scroller>
+    @if (!hasConversation()) {
+      <div class="assistant__empty">
+        <p>
+          Ask anything about your trip. The assistant talks to
+          <strong>{{ agui.provider().vendor }} {{ agui.provider().model }}</strong>
+          over the AG-UI protocol and can search flights, stays and (soon) airport taxis.
+        </p>
+        <div class="assistant__suggestions">
+          @for (suggestion of suggestions; track suggestion) {
+            <button matButton="outlined" type="button" (click)="use(suggestion)">
+              {{ suggestion }}
+            </button>
+          }
+        </div>
+      </div>
+    }
+
+    @for (message of agui.visibleMessages(); track message.id) {
+      <article class="bubble" [class.bubble--user]="message.role === 'user'">
+        @if (textOf(message)) {
+          <p>{{ textOf(message) }}</p>
+        }
+        @if (toolCallCount(message); as count) {
+          <span class="bubble__tools">
+            <mat-icon inline>build</mat-icon>
+            {{ count }} tool call{{ count > 1 ? 's' : '' }}
+          </span>
+        }
+      </article>
+    }
+
+    @if (agui.activeTool(); as tool) {
+      <div class="assistant__tool">
+        <mat-icon inline>travel_explore</mat-icon>
+        Running <code>{{ tool }}</code>…
+      </div>
+    }
+
+    @if (agui.error(); as error) {
+      <div class="assistant__error">
+        <mat-icon inline>error_outline</mat-icon>
+        {{ error }}
+      </div>
+    }
+  </div>
+
+  <form class="assistant__composer" (ngSubmit)="submit()">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="assistant__input">
+      <mat-label>Message the assistant</mat-label>
+      <textarea
+        matInput
+        rows="2"
+        [ngModel]="draft()"
+        (ngModelChange)="draft.set($event)"
+        name="draft"
+        (keydown.enter)="onEnter($event)"
+      ></textarea>
+    </mat-form-field>
+
+    @if (agui.isRunning()) {
+      <button matFab type="button" aria-label="Stop generating" (click)="agui.abort()">
+        <mat-icon>stop</mat-icon>
+      </button>
+    } @else {
+      <button
+        matFab
+        class="tp-yellow-button"
+        type="submit"
+        aria-label="Send message"
+        [disabled]="!draft().trim()"
+      >
+        <mat-icon>send</mat-icon>
+      </button>
+    }
+  </form>
+</section>

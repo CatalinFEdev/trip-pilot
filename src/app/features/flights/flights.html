@@ -1,0 +1,99 @@
+<section class="page-head tp-brand-surface">
+  <div class="page-head__inner">
+    <h1><mat-icon>flight_takeoff</mat-icon> Flights</h1>
+    <p>Compare fares, or just ask the assistant on the right to do it for you.</p>
+  </div>
+</section>
+
+<div class="tp-section">
+  <mat-card appearance="outlined" class="search-card">
+    <form [formGroup]="form" (ngSubmit)="search()" class="search-form">
+      <mat-form-field appearance="outline">
+        <mat-label>From</mat-label>
+        <input matInput formControlName="origin" placeholder="City or airport" />
+        <mat-icon matSuffix>flight_takeoff</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>To</mat-label>
+        <input matInput formControlName="destination" placeholder="City or airport" />
+        <mat-icon matSuffix>flight_land</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Departure</mat-label>
+        <input matInput [matDatepicker]="depPicker" formControlName="departureDate" />
+        <mat-datepicker-toggle matIconSuffix [for]="depPicker" />
+        <mat-datepicker #depPicker />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Return (optional)</mat-label>
+        <input matInput [matDatepicker]="retPicker" formControlName="returnDate" />
+        <mat-datepicker-toggle matIconSuffix [for]="retPicker" />
+        <mat-datepicker #retPicker />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="search-form__narrow">
+        <mat-label>Travellers</mat-label>
+        <input matInput type="number" min="1" formControlName="passengers" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="search-form__narrow">
+        <mat-label>Cabin</mat-label>
+        <mat-select formControlName="cabin">
+          @for (cabin of cabins; track cabin) {
+            <mat-option [value]="cabin">{{ cabin | titlecase }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <button matButton="filled" class="tp-yellow-button search-form__submit" type="submit">
+        <mat-icon>search</mat-icon>
+        Search
+      </button>
+    </form>
+  </mat-card>
+
+  @if (results().length) {
+    <h2 class="tp-section-title results__title">{{ results().length }} flights found</h2>
+    <div class="results">
+      @for (offer of results(); track offer.id) {
+        <mat-card appearance="outlined" class="offer">
+          <div class="offer__main">
+            <div class="offer__airline">
+              <mat-icon>airlines</mat-icon>
+              <div>
+                <strong>{{ offer.airline }}</strong>
+                <small>{{ offer.flightNumber }} · {{ offer.cabin | titlecase }}</small>
+              </div>
+            </div>
+
+            <div class="offer__times">
+              <div>
+                <strong>{{ offer.departure | date: 'HH:mm' }}</strong>
+                <small>{{ offer.origin }}</small>
+              </div>
+              <div class="offer__line">
+                <span>{{ duration(offer.durationMinutes) }}</span>
+                <mat-icon>trending_flat</mat-icon>
+                <small>{{ offer.stops === 0 ? 'Direct' : offer.stops + ' stop' }}</small>
+              </div>
+              <div>
+                <strong>{{ offer.arrival | date: 'HH:mm' }}</strong>
+                <small>{{ offer.destination }}</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="offer__cta">
+            <span class="offer__price">€{{ offer.priceEur | number: '1.0-0' }}</span>
+            <button matButton="filled" type="button" (click)="select(offer)">Select</button>
+          </div>
+        </mat-card>
+      }
+    </div>
+  } @else if (searched()) {
+    <p class="tp-section-subtitle">No flights matched that search. Try different dates.</p>
+  }
+</div>

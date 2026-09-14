@@ -1,0 +1,124 @@
+@use '@angular/material' as mat;
+
+html {
+  height: 100%;
+  color-scheme: light;
+
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$yellow-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+}
+
+:root {
+  --tp-blue-900: #03305f;
+  --tp-blue-800: #073c77;
+  --tp-blue-700: #114a96;
+  --tp-blue-600: #1b57a8;
+  --tp-blue-500: #2f63ae;
+  --tp-yellow: #ffe000;
+  --tp-yellow-600: #e6c900;
+  --tp-surface: #f4f7fc;
+
+  --tp-gradient: linear-gradient(
+    150deg,
+    var(--tp-blue-700) 0%,
+    var(--tp-blue-600) 55%,
+    var(--tp-blue-500) 100%
+  );
+
+  /* Faint geometric pattern from the brand artwork. */
+  --tp-pattern: url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="220" height="220" viewBox="0 0 220 220">\
+<g fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="2">\
+<circle cx="40" cy="45" r="28"/><circle cx="130" cy="30" r="34"/><circle cx="195" cy="120" r="30"/>\
+<circle cx="70" cy="150" r="38"/><circle cx="160" cy="190" r="26"/>\
+<rect x="10" y="95" width="52" height="52" transform="rotate(12 36 121)"/>\
+<rect x="120" y="80" width="44" height="44" transform="rotate(-18 142 102)"/>\
+<rect x="150" y="0" width="40" height="40" transform="rotate(25 170 20)"/>\
+<rect x="0" y="185" width="36" height="36" transform="rotate(-10 18 203)"/>\
+</g></svg>');
+}
+
+body {
+  margin: 0;
+  height: 100%;
+  background-color: var(--tp-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+}
+
+/* ---- brand helpers -------------------------------------------------- */
+
+.tp-brand-surface {
+  background-color: var(--tp-blue-700);
+  background-image: var(--tp-pattern), var(--tp-gradient);
+  background-blend-mode: overlay, normal;
+  color: #fff;
+}
+
+.tp-accent-bar {
+  height: 6px;
+  background: var(--tp-yellow);
+}
+
+.tp-section {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 32px 24px 56px;
+}
+
+.tp-section-title {
+  margin: 0 0 4px;
+  font: var(--mat-sys-headline-small);
+  color: var(--tp-blue-900);
+}
+
+.tp-section-subtitle {
+  margin: 0 0 24px;
+  color: color-mix(in srgb, var(--tp-blue-900) 65%, transparent);
+}
+
+.page-head {
+  padding: 40px 24px 48px;
+
+  .page-head__inner {
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 8px;
+    font-size: clamp(26px, 3.4vw, 38px);
+    font-weight: 700;
+
+    mat-icon {
+      color: var(--tp-yellow);
+    }
+  }
+
+  p {
+    margin: 0;
+    max-width: 620px;
+    color: rgba(255, 255, 255, 0.85);
+  }
+}
+
+.tp-yellow-button {
+  background: var(--tp-yellow) !important;
+  color: var(--tp-blue-900) !important;
+  font-weight: 600;
+
+  &:hover {
+    background: var(--tp-yellow-600) !important;
+  }
+}

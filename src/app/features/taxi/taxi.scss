@@ -1,0 +1,106 @@
+.page-head__badge {
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: var(--tp-yellow);
+  color: var(--tp-blue-900);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.taxi__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  align-items: start;
+}
+
+.roadmap {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    background: #fff;
+    border: 1px solid color-mix(in srgb, var(--tp-blue-700) 12%, transparent);
+    border-left: 4px solid var(--tp-yellow);
+    font-size: 14px;
+    color: var(--tp-blue-900);
+  }
+
+  mat-icon {
+    color: var(--tp-blue-600);
+  }
+}
+
+.waitlist-card {
+  background: #fff;
+  border-top: 4px solid var(--tp-yellow);
+
+  h3 {
+    margin: 4px 0 16px;
+    color: var(--tp-blue-900);
+  }
+}
+
+.waitlist-form {
+  display: grid;
+  gap: 8px;
+
+  button {
+    justify-self: start;
+    height: 48px;
+  }
+}
+
+.requests__title {
+  margin: 40px 0 16px;
+}
+
+.requests {
+  display: grid;
+  gap: 12px;
+}
+
+.request {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: #fff;
+
+  mat-icon {
+    color: var(--tp-blue-600);
+  }
+
+  strong {
+    display: block;
+    color: var(--tp-blue-900);
+  }
+
+  small {
+    color: color-mix(in srgb, var(--tp-blue-900) 60%, transparent);
+    font-size: 12px;
+  }
+}
+
+.request__status {
+  margin-left: auto;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: var(--tp-yellow);
+  color: var(--tp-blue-900);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
