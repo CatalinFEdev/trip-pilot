@@ -30,16 +30,15 @@
 
 .results {
   display: grid;
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
 }
 
 .offer {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 16px 20px;
+  flex-direction: column;
+  gap: 14px;
+  padding: 14px 16px;
   background: #fff;
   border-left: 4px solid var(--tp-blue-600);
 
@@ -50,10 +49,8 @@
 
 .offer__main {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 28px;
-  flex: 1 1 420px;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .offer__airline {
@@ -77,14 +74,35 @@
   }
 }
 
+.offer__legs {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.offer__leg-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--tp-blue-500);
+
+  &:not(:first-child) {
+    margin-top: 8px;
+    padding-top: 10px;
+    border-top: 1px dashed color-mix(in srgb, var(--tp-blue-900) 18%, transparent);
+  }
+}
+
 .offer__times {
   display: flex;
   align-items: center;
-  gap: 18px;
+  justify-content: space-between;
+  gap: 14px;
 
   strong {
     display: block;
-    font-size: 18px;
+    font-size: 16px;
     color: var(--tp-blue-900);
   }
 
@@ -109,11 +127,13 @@
 .offer__cta {
   display: flex;
   align-items: center;
-  gap: 16px;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
 }
 
 .offer__price {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
   color: var(--tp-blue-900);
 }

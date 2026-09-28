@@ -1,23 +1,20 @@
 <section class="page-head tp-brand-surface">
   <div class="page-head__inner">
-    <span class="page-head__badge">Coming soon</span>
-    <h1><mat-icon>local_taxi</mat-icon> Airport pick-up</h1>
-    <p>
-      A taxi waiting at arrivals the moment you land. Not live yet — join the waitlist and we will
-      switch it on for you first.
-    </p>
+    <span class="page-head__badge">{{ i18n.t('taxi.badge') }}</span>
+    <h1><mat-icon>local_taxi</mat-icon> {{ i18n.t('taxi.title') }}</h1>
+    <p>{{ i18n.t('taxi.description') }}</p>
   </div>
 </section>
 
 <div class="tp-section taxi">
   <div class="taxi__grid">
     <div>
-      <h2 class="tp-section-title">What we are building</h2>
+      <h2 class="tp-section-title">{{ i18n.t('taxi.building') }}</h2>
       <ul class="roadmap">
-        @for (item of roadmap; track item.text) {
+        @for (item of roadmap; track item.key) {
           <li>
             <mat-icon>{{ item.icon }}</mat-icon>
-            {{ item.text }}
+            {{ i18n.t(item.key) }}
           </li>
         }
       </ul>
@@ -25,31 +22,68 @@
 
     <mat-card appearance="outlined" class="waitlist-card">
       <mat-card-content>
-        <h3>Join the waitlist</h3>
+        <h3>{{ i18n.t('taxi.demoRequest') }}</h3>
         <form [formGroup]="form" (ngSubmit)="submit()" class="waitlist-form">
           <mat-form-field appearance="outline">
-            <mat-label>Arrival airport</mat-label>
-            <input matInput formControlName="airport" placeholder="e.g. OTP" />
+            <mat-label>{{ i18n.t('taxi.arrivalCity') }}</mat-label>
+            <mat-select
+              formControlName="arrivalCity"
+              (selectionChange)="changeArrivalCity($event.value)"
+            >
+              @for (city of airportCities; track city.id) {
+                <mat-option [value]="city.id">{{ city.name }}</mat-option>
+              }
+            </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Drop-off address</mat-label>
+            <mat-label>{{ i18n.t('taxi.airport') }}</mat-label>
+            <mat-select formControlName="airport">
+              @for (airport of nearbyAirports(); track airport.code) {
+                <mat-option [value]="airport.code">{{ airport.name }} ({{ airport.code }})</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{ i18n.t('taxi.dropOff') }}</mat-label>
             <input matInput formControlName="dropOffAddress" />
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Pick-up time</mat-label>
-            <input matInput type="datetime-local" formControlName="pickUpTime" />
+            <mat-label>{{ i18n.t('taxi.pickUpDate') }}</mat-label>
+            <input matInput [matDatepicker]="pickUpDatePicker" formControlName="pickUpDate" />
+            <mat-datepicker-toggle matIconSuffix [for]="pickUpDatePicker" />
+            <mat-datepicker #pickUpDatePicker />
           </mat-form-field>
 
+          <div class="waitlist-form__time">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ i18n.t('taxi.pickUpHour') }}</mat-label>
+              <mat-select formControlName="pickUpHour">
+                @for (hour of hours; track hour) {
+                  <mat-option [value]="hour">{{ hour }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>{{ i18n.t('taxi.pickUpMinute') }}</mat-label>
+              <mat-select formControlName="pickUpMinute">
+                @for (minute of minutes; track minute) {
+                  <mat-option [value]="minute">{{ minute }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+
           <mat-form-field appearance="outline">
-            <mat-label>Passengers</mat-label>
+            <mat-label>{{ i18n.t('taxi.passengers') }}</mat-label>
             <input matInput type="number" min="1" formControlName="passengers" />
           </mat-form-field>
 
           <button matButton="filled" class="tp-yellow-button" type="submit">
             <mat-icon>notifications_active</mat-icon>
-            Notify me
+            {{ i18n.t('taxi.submit') }}
           </button>
         </form>
       </mat-card-content>
@@ -57,7 +91,7 @@
   </div>
 
   @if (waitlist().length) {
-    <h2 class="tp-section-title requests__title">Your requests</h2>
+    <h2 class="tp-section-title requests__title">{{ i18n.t('taxi.requests') }}</h2>
     <div class="requests">
       @for (quote of waitlist(); track quote.id) {
         <mat-card appearance="outlined" class="request">
@@ -65,11 +99,17 @@
           <div>
             <strong>{{ quote.airport }} → {{ quote.dropOffAddress }}</strong>
             <small>
-              {{ quote.pickUpTime | date: 'medium' }} · {{ quote.passengers }} passenger(s) ·
-              approx. €{{ quote.estimatedPriceEur }}
+              {{ i18n.formatDate(quote.pickUpTime, { dateStyle: 'medium', timeStyle: 'short' }) }} ·
+              {{
+                i18n.t(quote.passengers === 1 ? 'common.passenger' : 'common.passengers', {
+                  count: quote.passengers,
+                })
+              }}
+              ·
+              {{ i18n.formatCurrency(quote.estimatedPriceEur) }}
             </small>
           </div>
-          <span class="request__status">Waitlisted</span>
+          <span class="request__status">{{ i18n.t('taxi.status') }}</span>
         </mat-card>
       }
     </div>

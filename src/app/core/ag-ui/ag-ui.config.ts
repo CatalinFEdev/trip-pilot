@@ -1,25 +1,44 @@
 import { InjectionToken, Provider } from '@angular/core';
+import { AgUiConfig } from './ag-ui.model';
 
-/**
- * One selectable LLM behind an AG-UI compatible endpoint.
- * Each provider points at its own agent server implementing the
- * AG-UI protocol (SSE stream of AG-UI events over HTTP POST).
- */
-export interface LlmProvider {
-  id: string;
-  label: string;
-  vendor: string;
-  model: string;
-  /** URL of the AG-UI agent endpoint serving this model. */
-  url: string;
-  headers?: Record<string, string>;
-  description?: string;
-}
-
-export interface AgUiConfig {
-  providers: LlmProvider[];
-  defaultProviderId: string;
-}
+/** LLM providers exposed in the assistant panel via the AG-UI protocol. */
+export const AG_UI_APP_CONFIG: AgUiConfig = {
+  defaultProviderId: 'local',
+  providers: [
+    {
+      id: 'openai',
+      label: 'GPT',
+      vendor: 'OpenAI',
+      model: 'gpt-4.1',
+      url: '/api/agui/openai',
+      description: 'Balanced reasoning, strong tool use.',
+    },
+    {
+      id: 'anthropic',
+      label: 'Claude',
+      vendor: 'Anthropic',
+      model: 'claude-sonnet-4',
+      url: '/api/agui/anthropic',
+      description: 'Long itineraries and careful planning.',
+    },
+    {
+      id: 'gemini',
+      label: 'Gemini',
+      vendor: 'Google',
+      model: 'gemini-2.5-pro',
+      url: '/api/agui/gemini',
+      description: 'Fast, multimodal, great with maps.',
+    },
+    {
+      id: 'local',
+      label: 'Demo',
+      vendor: 'TripPilot',
+      model: 'offline assistant',
+      url: '/api/agui/local',
+      description: 'Offline demo replies, no API key required.',
+    },
+  ],
+};
 
 export const AG_UI_CONFIG = new InjectionToken<AgUiConfig>('AG_UI_CONFIG');
 

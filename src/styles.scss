@@ -33,17 +33,17 @@ html {
     var(--tp-blue-500) 100%
   );
 
-  /* Faint geometric pattern from the brand artwork. */
-  --tp-pattern: url('data:image/svg+xml;utf8,\
-<svg xmlns="http://www.w3.org/2000/svg" width="220" height="220" viewBox="0 0 220 220">\
-<g fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="2">\
-<circle cx="40" cy="45" r="28"/><circle cx="130" cy="30" r="34"/><circle cx="195" cy="120" r="30"/>\
-<circle cx="70" cy="150" r="38"/><circle cx="160" cy="190" r="26"/>\
-<rect x="10" y="95" width="52" height="52" transform="rotate(12 36 121)"/>\
-<rect x="120" y="80" width="44" height="44" transform="rotate(-18 142 102)"/>\
-<rect x="150" y="0" width="40" height="40" transform="rotate(25 170 20)"/>\
-<rect x="0" y="185" width="36" height="36" transform="rotate(-10 18 203)"/>\
+  --tp-hero-window-view: url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420">\
+<g fill="none" stroke="%235f8fcc" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="0.5">\
+<path d="M510 255c64-6 128-18 209-41 44-12 82-25 123-44"/>\
+<path d="M474 272c54 0 112-5 183-18 48-9 100-22 161-42"/>\
+<path d="M565 241l59-66 64-8-37 57"/>\
+<path d="M652 224l90-7"/>\
+<path d="M610 180l26-36 31-4-16 31"/>\
+<path d="M754 189c23-6 45-15 69-28"/>\
 </g></svg>');
+
 }
 
 body {
@@ -58,14 +58,13 @@ body {
 
 .tp-brand-surface {
   background-color: var(--tp-blue-700);
-  background-image: var(--tp-pattern), var(--tp-gradient);
-  background-blend-mode: overlay, normal;
+  background-image: var(--tp-gradient);
   color: #fff;
 }
 
 .tp-accent-bar {
   height: 6px;
-  background: var(--tp-yellow);
+  background: var(--tp-blue-900);
 }
 
 .tp-section {
@@ -121,4 +120,69 @@ body {
   &:hover {
     background: var(--tp-yellow-600) !important;
   }
+}
+
+/* Shared dropdown layout — all mat-select panels match the language submenu. */
+div.mat-mdc-select-panel {
+  margin-top: 8px;
+  padding: 6px !important;
+  border: 1px solid color-mix(in srgb, var(--tp-blue-700) 24%, transparent);
+  border-radius: 12px !important;
+  background: #fff !important;
+  box-shadow: 0 12px 30px rgba(3, 48, 95, 0.22) !important;
+
+  --mat-option-label-text-color: var(--tp-blue-900);
+  --mat-option-hover-state-layer-color: color-mix(
+    in srgb,
+    var(--tp-blue-600) 10%,
+    transparent
+  );
+  --mat-option-focus-state-layer-color: color-mix(
+    in srgb,
+    var(--tp-blue-600) 14%,
+    transparent
+  );
+  --mat-option-selected-state-label-text-color: var(--tp-blue-900);
+  --mat-option-selected-state-layer-color: var(--tp-yellow);
+
+  .mat-mdc-option {
+    min-height: 42px;
+    border-radius: 8px;
+    font-weight: 400;
+  }
+
+  .mat-pseudo-checkbox {
+    display: none;
+  }
+}
+
+/* Datepicker popup matches the shared dropdown layout. */
+.mat-datepicker-content {
+  margin-top: 8px;
+  border: 1px solid color-mix(in srgb, var(--tp-blue-700) 24%, transparent);
+  border-radius: 12px !important;
+  background: #fff !important;
+  box-shadow: 0 12px 30px rgba(3, 48, 95, 0.22) !important;
+
+  --mat-datepicker-calendar-date-selected-state-background-color: var(--tp-yellow);
+  --mat-datepicker-calendar-date-selected-state-text-color: var(--tp-blue-900);
+  --mat-datepicker-calendar-date-today-outline-color: var(--tp-blue-600);
+  --mat-datepicker-calendar-date-hover-state-background-color: color-mix(
+    in srgb,
+    var(--tp-blue-600) 10%,
+    transparent
+  );
+  --mat-datepicker-calendar-date-focus-state-background-color: color-mix(
+    in srgb,
+    var(--tp-blue-600) 14%,
+    transparent
+  );
+  --mat-datepicker-calendar-date-text-color: var(--tp-blue-900);
+  --mat-datepicker-calendar-header-text-color: color-mix(
+    in srgb,
+    var(--tp-blue-900) 60%,
+    transparent
+  );
+  --mat-datepicker-calendar-period-button-text-color: var(--tp-blue-900);
+  --mat-datepicker-calendar-navigation-button-icon-color: var(--tp-blue-600);
 }

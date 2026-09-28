@@ -14,13 +14,16 @@
   padding-inline: 16px;
   position: relative;
   z-index: 3;
+  background-color: var(--tp-blue-900);
+  background-image: none;
+  box-shadow: 0 4px 18px rgba(3, 48, 95, 0.16);
 }
 
 .shell__brand {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: inherit;
+  color: #fff;
   text-decoration: none;
   font-weight: 700;
   letter-spacing: 0.01em;
@@ -45,13 +48,13 @@
   margin-left: 20px;
 
   a {
-    color: rgba(255, 255, 255, 0.88);
+    color: rgba(255, 255, 255, 0.96);
   }
 }
 
 .shell__nav-link--active {
   color: #fff;
-  background: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.16);
 
   mat-icon {
     color: var(--tp-yellow);
@@ -73,19 +76,63 @@
   flex: 1 1 auto;
 }
 
+.shell__language {
+  width: 104px;
+  align-self: stretch;
+
+  --mat-form-field-container-height: 100%;
+  --mat-form-field-container-vertical-padding: 20px;
+  --mat-form-field-outlined-outline-color: transparent;
+  --mat-form-field-outlined-hover-outline-color: transparent;
+  --mat-form-field-outlined-focus-outline-color: transparent;
+  --mat-form-field-outlined-label-text-color: #fff;
+  --mat-select-enabled-trigger-text-color: #fff;
+  --mat-select-enabled-arrow-color: #fff;
+}
+
 .shell__container {
   flex: 1 1 auto;
   background: var(--tp-surface);
+  display: flex;
+}
+
+.shell__layout {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 400px);
+  align-items: start;
+  min-height: 100%;
 }
 
 .shell__assistant {
-  width: min(400px, 92vw);
-  border-left: none;
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid color-mix(in srgb, var(--tp-blue-900) 8%, transparent);
+  background: #fff;
+}
+
+.shell__assistant-panel {
+  flex: 2 1 0;
+  min-height: 0;
+}
+
+.shell__trip-plan {
+  flex: 1 1 0;
+  min-height: 0;
 }
 
 .shell__content {
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  min-height: 100%;
 }
 
 .shell__footer {
@@ -128,6 +175,22 @@
 }
 
 @media (max-width: 900px) {
+  .shell__layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .shell__assistant {
+    position: static;
+    height: auto;
+    border-left: none;
+    border-top: 1px solid color-mix(in srgb, var(--tp-blue-900) 8%, transparent);
+  }
+
+  .shell__assistant-panel,
+  .shell__trip-plan {
+    flex: 0 0 auto;
+  }
+
   .shell__nav {
     display: none;
   }

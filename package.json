@@ -4,9 +4,17 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "start:frontend": "ng serve --proxy-config proxy.conf.json",
+    "start:agent": "npm run dev --workspace agent-server",
+    "dev": "concurrently --kill-others-on-fail --names frontend,agent --prefix-colors blue,magenta \"npm:start:frontend\" \"npm:start:agent\"",
+    "build": "npm run build:frontend && npm run build:agent",
+    "build:frontend": "ng build",
+    "build:agent": "npm run build --workspace agent-server",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test --watch=false --browsers=chromium",
+    "test:watch": "ng test --browsers=chromium",
+    "test:e2e": "playwright test --config=e2e/playwright.config.ts",
+    "test:e2e:coverage": "playwright test --config=e2e/playwright.coverage.config.ts"
   },
   "prettier": {
     "printWidth": 100,
@@ -21,6 +29,9 @@
     ]
   },
   "private": true,
+  "workspaces": [
+    "agent-server"
+  ],
   "packageManager": "npm@11.4.2",
   "dependencies": {
     "@ag-ui/client": "^0.0.59",
@@ -40,8 +51,16 @@
     "@angular/build": "^21.1.4",
     "@angular/cli": "^21.1.4",
     "@angular/compiler-cli": "^21.1.0",
+    "@angular/platform-browser-dynamic": "^21.2.24",
+    "@playwright/test": "^1.63.0",
+    "@vitest/browser-playwright": "^4.1.11",
+    "@vitest/coverage-v8": "^4.1.11",
+    "concurrently": "^9.2.1",
+    "istanbul-lib-coverage": "^3.2.2",
     "jsdom": "^27.1.0",
+    "playwright": "^1.55.0",
     "typescript": "~5.9.2",
+    "v8-to-istanbul": "^9.3.0",
     "vitest": "^4.0.8"
   }
 }

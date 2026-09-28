@@ -1,13 +1,14 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { HttpAgent, randomUUID } from '@ag-ui/client';
+import { HttpAgent } from '@ag-ui/client';
 import { AssistantMessage, Message } from '@ag-ui/core';
-import { AG_UI_CONFIG, LlmProvider } from './ag-ui.config';
-import { TRIP_TOOLS } from './trip-tools';
-import { TripToolsService } from './trip-tools.service';
+import { AG_UI_CONFIG } from './ag-ui.config';
+import { AgentStatus, LlmProvider } from './ag-ui.model';
+import { TRIP_TOOLS } from '../../features/assistant/tools/trip-tools.schema';
+import { TripToolsService } from '../../features/assistant/tools/trip-tools.service';
 
 const MAX_TOOL_ROUNDTRIPS = 5;
-
-export type AgentStatus = 'idle' | 'running' | 'error';
+const createId = (): string =>
+  globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 
 /**
  * Bridges Angular to any LLM that speaks the AG-UI protocol.
@@ -21,7 +22,7 @@ export class AgUiService {
   private readonly tools = inject(TripToolsService);
 
   private readonly agents = new Map<string, HttpAgent>();
-  private threadId = randomUUID();
+  private threadId = createId();
 
   readonly providers: readonly LlmProvider[] = this.config.providers;
   readonly providerId = signal(this.config.defaultProviderId);
@@ -46,7 +47,7 @@ export class AgUiService {
   }
 
   reset(): void {
-    this.threadId = randomUUID();
+    this.threadId = createId();
     this.agents.clear();
     this.messages.set([]);
     this.error.set(null);
@@ -59,7 +60,7 @@ export class AgUiService {
     if (!content || this.isRunning()) return;
 
     const agent = this.agent();
-    agent.addMessage({ id: randomUUID(), role: 'user', content });
+    agent.addMessage({ id: createId(), role: 'user', content });
     this.messages.set([...agent.messages]);
     await this.runLoop(agent);
   }
@@ -82,8 +83,9 @@ export class AgUiService {
             {
               description: 'application',
               value:
-                'TripPilot — an Angular travel assistant that books flights and accommodation. ' +
-                'Airport taxi pick-up is on the roadmap and can only be waitlisted.',
+                'TripPilot is a travel-planning demo. It can search and compare demo flight and ' +
+                'accommodation offers, and create non-binding airport-transfer estimates. It ' +
+                'never completes reservations, processes payments, or contacts suppliers.',
             },
             { description: 'currentDate', value: new Date().toISOString().slice(0, 10) },
           ],
@@ -119,7 +121,7 @@ export class AgUiService {
       this.activeTool.set(call.function.name);
       const content = await this.tools.execute(call.function.name, call.function.arguments);
       agent.addMessage({
-        id: randomUUID(),
+        id: createId(),
         role: 'tool',
         content,
         toolCallId: call.id,

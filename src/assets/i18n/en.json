@@ -1,0 +1,180 @@
+{
+  "language": {
+    "english": "English",
+    "german": "Deutsch"
+  },
+  "nav": {
+    "home": "Home",
+    "flights": "Flights",
+    "stays": "Stays",
+    "taxi": "Airport taxi"
+  },
+  "common": {
+    "soon": "Soon",
+    "search": "Search",
+    "select": "Select",
+    "close": "Close",
+    "gotIt": "Got it",
+    "direct": "Direct",
+    "stop": "{count} stop",
+    "stops": "{count} stops",
+    "passenger": "{count} passenger",
+    "passengers": "{count} passengers"
+  },
+  "shell": {
+    "toggleAssistant": "Toggle the AI trip assistant",
+    "assistant": "Assistant",
+    "footer": "Explore flights, stays and airport transfers, assisted by AI.",
+    "poweredBy": "Powered by the AI trip assistant"
+  },
+  "home": {
+    "eyebrow": "AI travel concierge",
+    "title": "Plan it once. Fly, stay and ride.",
+    "description": "TripPilot connects to your preferred LLM through the AI trip assistant, so travel planning is just a conversation.",
+    "searchFlights": "Search flights",
+    "findStay": "Find a stay",
+    "servicesTitle": "Explore your trip",
+    "servicesSubtitle": "Compare travel options and plan your itinerary.",
+    "assistantTitle": "How the assistant works",
+    "assistantSubtitle": "Every message is an AI trip assistant run: events stream in, tools execute in the browser, and results return to the model.",
+    "flight": {
+      "title": "Find a flight",
+      "text": "Compare fares across airlines and let the assistant identify suitable connections."
+    },
+    "stay": {
+      "title": "Find a place to stay",
+      "text": "Hotels, apartments and villas in any city, filtered by budget and rating."
+    },
+    "taxi": {
+      "title": "Airport transfer",
+      "text": "A transfer matched to your arrival or departure time. Coming soon.",
+      "cta": "Explore transfers"
+    },
+    "step": {
+      "describe": {
+        "title": "Describe the trip",
+        "text": "Use plain language, for example: \"Vienna, first weekend of June, two people\"."
+      },
+      "stream": {
+        "title": "AI trip assistant streams it",
+        "text": "The agent streams events, state and tool calls straight into the interface."
+      },
+      "confirm": {
+        "title": "You decide",
+        "text": "TripPilot only helps you explore options; no reservation is made here."
+      }
+    }
+  },
+  "flights": {
+    "title": "Flights",
+    "description": "Compare available fares or ask the assistant to research options for you.",
+    "from": "From",
+    "to": "To",
+    "cityOrAirport": "City or airport",
+    "departure": "Departure",
+    "return": "Return (optional)",
+    "outbound": "Outbound",
+    "inbound": "Return",
+    "travellers": "Travellers",
+    "cabin": "Cabin",
+    "found": "{count} flights found",
+    "empty": "No flights matched that search. Try different dates.",
+    "selected": "{flight} selected for your trip plan — {price}."
+  },
+  "stays": {
+    "title": "Stays",
+    "description": "Hotels, apartments and villas, filtered by budget and guest rating.",
+    "city": "City",
+    "where": "Where are you going?",
+    "checkIn": "Check-in",
+    "checkOut": "Check-out",
+    "guests": "Guests",
+    "maxNightly": "Max. price / night",
+    "found": "{count} places to stay",
+    "empty": "Nothing matched that budget. Try raising the nightly cap or changing dates.",
+    "perNight": "per night",
+    "forNights": "for {count} nights",
+    "explore": "Add to trip plan",
+    "selected": "{name} added to your trip plan — {price} total.",
+    "reviews": "{count} reviews"
+  },
+  "taxi": {
+    "badge": "Coming soon",
+    "title": "Airport transfer",
+    "description": "Airport transfer planning is coming soon. You can leave a demo request to preview the experience.",
+    "building": "What we are building",
+    "demoRequest": "Create a demo request",
+    "arrivalCity": "Arrival city",
+    "airport": "Arrival airport",
+    "airportPlaceholder": "e.g. OTP",
+    "dropOff": "Drop-off address",
+    "pickUpDate": "Pick-up date",
+    "pickUpHour": "Hour",
+    "pickUpMinute": "Minute",
+    "passengers": "Passengers",
+    "submit": "Show estimate",
+    "requests": "Your demo requests",
+    "status": "Demo estimate",
+    "estimate": "Demo estimate: {price}. No transfer has been reserved.",
+    "roadmap": {
+      "landing": "Pick-up time synchronized with your planned landing time.",
+      "fare": "An upfront indicative fare before you continue to a supplier.",
+      "vehicle": "Vehicle options matched to your party and luggage."
+    }
+  },
+  "assistant": {
+    "title": "Trip assistant",
+    "newConversation": "Start a new conversation",
+    "model": "Model",
+    "empty": "Ask about your trip. The assistant can help search flights, stays and planned airport transfers.",
+    "tools": {
+      "one": "{count} tool call",
+      "other": "{count} tool calls"
+    },
+    "running": "Running {tool}…",
+    "message": "Message the assistant",
+    "stop": "Stop generating",
+    "send": "Send message",
+    "suggestion": {
+      "flight": "Find flights from Bucharest to Lisbon on 12 June",
+      "stay": "Where should I stay in Porto for 3 nights under 120 EUR?",
+      "trip": "Plan a 4-day trip to Vienna with flights and a central hotel"
+    }
+  },
+  "plan": {
+    "title": "Trip plan",
+    "flight": "Flight",
+    "stay": "Stay",
+    "taxi": "Airport taxi",
+    "empty": "Select a flight, a stay or a taxi and your picks will appear here.",
+    "emptyItem": "Not selected yet",
+    "total": "Estimated total",
+    "save": "Save trip",
+    "saved": "Trip plan saved on this device.",
+    "savedAt": "Saved on {date}",
+    "clear": "Clear the trip plan",
+    "remove": "Remove from trip plan"
+  },
+  "cabins": {
+    "economy": "Economy",
+    "premium": "Premium economy",
+    "business": "Business",
+    "first": "First"
+  },
+  "kinds": {
+    "hotel": "Hotel",
+    "apartment": "Apartment",
+    "hostel": "Hostel",
+    "villa": "Villa"
+  },
+  "amenities": {
+    "Free WiFi": "Free WiFi",
+    "Breakfast included": "Breakfast included",
+    "Airport shuttle": "Airport shuttle",
+    "Air conditioning": "Air conditioning",
+    "Parking": "Parking",
+    "Pool": "Pool",
+    "Gym": "Gym",
+    "Pet friendly": "Pet friendly"
+  }
+}

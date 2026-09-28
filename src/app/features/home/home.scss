@@ -1,5 +1,9 @@
 .hero {
   padding: 72px 24px 88px;
+  background-image: var(--tp-hero-window-view);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
 }
 
 .hero__inner {

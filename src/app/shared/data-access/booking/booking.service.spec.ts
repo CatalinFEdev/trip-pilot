@@ -18,7 +18,9 @@ describe('BookingService', () => {
     const second = booking.searchFlights(criteria);
 
     expect(first).toHaveLength(5);
-    expect(first.map((o) => o.priceEur)).toEqual([...first.map((o) => o.priceEur)].sort((a, b) => a - b));
+    expect(first.map((o) => o.priceEur)).toEqual(
+      [...first.map((o) => o.priceEur)].sort((a, b) => a - b),
+    );
     expect(second).toEqual(first);
   });
 
@@ -36,7 +38,7 @@ describe('BookingService', () => {
     expect(offers.every((o) => o.nights === 3)).toBe(true);
   });
 
-  it('waitlists taxi requests', () => {
+  it('creates a transient taxi demo estimate', () => {
     const booking = service();
     const quote = booking.requestTaxi({
       airport: 'OTP',
@@ -44,7 +46,7 @@ describe('BookingService', () => {
       pickUpTime: '2026-06-12T10:30',
     });
 
-    expect(quote.status).toBe('waitlisted');
+    expect(quote.status).toBe('demo_estimate');
     expect(booking.taxiWaitlist()).toContain(quote);
   });
 });

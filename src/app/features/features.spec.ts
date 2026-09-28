@@ -14,7 +14,7 @@ describe('feature pages', () => {
     { name: 'Home', component: Home, expected: 'Plan it once.' },
     { name: 'Flights', component: Flights, expected: 'Flights' },
     { name: 'Stays', component: Stays, expected: 'Stays' },
-    { name: 'Taxi', component: Taxi, expected: 'Airport pick-up' },
+    { name: 'Taxi', component: Taxi, expected: 'Airport transfer' },
   ] as { name: string; component: Type<unknown>; expected: string }[];
 
   for (const { name, component, expected } of cases) {

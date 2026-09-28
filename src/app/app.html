@@ -6,7 +6,7 @@
     </a>
 
     <nav class="shell__nav">
-      @for (item of nav; track item.path) {
+      @for (item of nav(); track item.path) {
         <a
           matButton
           [routerLink]="item.path"
@@ -24,48 +24,62 @@
 
     <span class="shell__spacer"></span>
 
+    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="shell__language">
+      <mat-select
+        [value]="i18n.language()"
+        [aria-label]="i18n.t('language.english') + ' / ' + i18n.t('language.german')"
+        (valueChange)="setLanguage($event)"
+      >
+        <mat-option value="en">{{ i18n.t('language.english') }}</mat-option>
+        <mat-option value="de">{{ i18n.t('language.german') }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <button
       matButton="filled"
       class="tp-yellow-button"
       type="button"
       (click)="toggleAssistant()"
-      matTooltip="Toggle the AI trip assistant"
+      [matTooltip]="i18n.t('shell.toggleAssistant')"
     >
       <mat-icon>auto_awesome</mat-icon>
-      Assistant
+      {{ i18n.t('shell.assistant') }}
     </button>
   </mat-toolbar>
 
   <div class="tp-accent-bar"></div>
 
-  <mat-sidenav-container class="shell__container">
-    <mat-sidenav
-      class="shell__assistant"
-      mode="side"
-      position="end"
-      [opened]="assistantOpen()"
-      (openedChange)="assistantOpen.set($event)"
-    >
-      <tp-assistant-panel />
-    </mat-sidenav>
+  <div class="shell__container">
+    <div class="shell__layout">
+      <div class="shell__content">
+        <router-outlet />
 
-    <mat-sidenav-content class="shell__content">
-      <router-outlet />
+        <footer class="shell__footer">
+          <div class="shell__footer-inner">
+            <div>
+              <strong>TripPilot</strong>
+              <p>{{ i18n.t('shell.footer') }}</p>
+            </div>
+            <div class="shell__footer-links">
+              @for (item of nav(); track item.path) {
+                <a [routerLink]="item.path">{{ item.label }}</a>
+              }
+            </div>
+            <small>© {{ year }} TripPilot · {{ i18n.t('shell.poweredBy') }}</small>
+          </div>
+        </footer>
+      </div>
 
-      <footer class="shell__footer">
-        <div class="shell__footer-inner">
-          <div>
-            <strong>TripPilot</strong>
-            <p>Flights, stays and — soon — airport taxi pick-ups, orchestrated by AI.</p>
+      @if (assistantOpen()) {
+        <aside class="shell__assistant">
+          <div class="shell__assistant-panel">
+            <tp-assistant-panel />
           </div>
-          <div class="shell__footer-links">
-            @for (item of nav; track item.path) {
-              <a [routerLink]="item.path">{{ item.label }}</a>
-            }
+          <div class="shell__trip-plan">
+            <tp-trip-plan />
           </div>
-          <small>© {{ year }} TripPilot · Powered by the AG-UI protocol</small>
-        </div>
-      </footer>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
+        </aside>
+      }
+    </div>
+  </div>
 </div>

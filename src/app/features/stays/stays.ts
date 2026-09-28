@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { DecimalPipe, TitleCasePipe } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -8,15 +7,17 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { BookingService } from '../../core/booking.service';
-import { StayOffer } from '../../core/models/booking.models';
+import { BookingService } from '../../shared/data-access/booking/booking.service';
+import { TripPlanService } from '../../shared/data-access/trip-plan/trip-plan.service';
+import { StayOffer } from '../../shared/data-access/booking/flights.model';
+import { I18nService } from '../../core/i18n/i18n.service';
+import { findArrivalCity, TAXI_AIRPORT_CITIES } from '../taxi/taxi.model';
 
 @Component({
   selector: 'tp-stays',
   imports: [
-    DecimalPipe,
-    TitleCasePipe,
     ReactiveFormsModule,
     MatButtonModule,
     MatCardModule,
@@ -25,6 +26,7 @@ import { StayOffer } from '../../core/models/booking.models';
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    MatSelectModule,
   ],
   templateUrl: './stays.html',
   styleUrl: './stays.scss',
@@ -32,17 +34,27 @@ import { StayOffer } from '../../core/models/booking.models';
 })
 export class Stays {
   private readonly booking = inject(BookingService);
+  private readonly tripPlan = inject(TripPlanService);
   private readonly fb = inject(FormBuilder);
   private readonly snackBar = inject(MatSnackBar);
+  protected readonly i18n = inject(I18nService);
 
   protected readonly results = this.booking.lastStayResults;
   protected readonly searched = signal(false);
+  protected readonly towns = TAXI_AIRPORT_CITIES.map((city) => city.name).sort((a, b) =>
+    a.localeCompare(b),
+  );
+
+  private readonly arrivalCity = findArrivalCity(this.tripPlan.flight());
+  private readonly arrivalDate = this.tripPlan.flight()
+    ? new Date(this.tripPlan.flight()!.arrival)
+    : new Date();
 
   protected readonly form = this.fb.nonNullable.group({
-    city: ['Porto', Validators.required],
-    checkIn: [new Date(), Validators.required],
-    checkOut: [new Date(Date.now() + 3 * 86_400_000), Validators.required],
-    guests: [2, [Validators.required, Validators.min(1)]],
+    city: [this.arrivalCity?.name ?? this.towns[0], Validators.required],
+    checkIn: [this.arrivalDate, Validators.required],
+    checkOut: [new Date(this.arrivalDate.getTime() + 3 * 86_400_000), Validators.required],
+    guests: [this.tripPlan.flight()?.passengers ?? 2, [Validators.required, Validators.min(1)]],
     maxNightlyPrice: [null as number | null],
   });
 
@@ -64,9 +76,15 @@ export class Stays {
   }
 
   protected select(offer: StayOffer): void {
-    this.snackBar.open(`${offer.name} reserved — €${offer.totalPriceEur} total`, 'Got it', {
-      duration: 4000,
-    });
+    this.tripPlan.selectStay(offer);
+    this.snackBar.open(
+      this.i18n.t('stays.selected', {
+        name: offer.name,
+        price: this.i18n.formatCurrency(offer.totalPriceEur),
+      }),
+      this.i18n.t('common.gotIt'),
+      { duration: 4000 },
+    );
   }
 
   private toIsoDate(date: Date): string {

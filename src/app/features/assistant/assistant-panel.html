@@ -3,14 +3,14 @@
     <div class="assistant__title">
       <mat-icon>auto_awesome</mat-icon>
       <div>
-        <strong>Trip assistant</strong>
-        <small>AG-UI protocol</small>
+        <strong>{{ i18n.t('assistant.title') }}</strong>
+        <small>AI assistant</small>
       </div>
       <button
         matIconButton
         type="button"
-        aria-label="Start a new conversation"
-        matTooltip="New conversation"
+        [attr.aria-label]="i18n.t('assistant.newConversation')"
+        [matTooltip]="i18n.t('assistant.newConversation')"
         (click)="agui.reset()"
       >
         <mat-icon>restart_alt</mat-icon>
@@ -18,7 +18,7 @@
     </div>
 
     <mat-form-field appearance="outline" subscriptSizing="dynamic" class="assistant__model">
-      <mat-label>Model</mat-label>
+      <mat-label>{{ i18n.t('assistant.model') }}</mat-label>
       <mat-select
         [value]="agui.providerId()"
         (valueChange)="agui.selectProvider($event)"
@@ -43,12 +43,11 @@
     @if (!hasConversation()) {
       <div class="assistant__empty">
         <p>
-          Ask anything about your trip. The assistant talks to
+          {{ i18n.t('assistant.empty') }}
           <strong>{{ agui.provider().vendor }} {{ agui.provider().model }}</strong>
-          over the AG-UI protocol and can search flights, stays and (soon) airport taxis.
         </p>
         <div class="assistant__suggestions">
-          @for (suggestion of suggestions; track suggestion) {
+          @for (suggestion of suggestions(); track suggestion) {
             <button matButton="outlined" type="button" (click)="use(suggestion)">
               {{ suggestion }}
             </button>
@@ -65,7 +64,7 @@
         @if (toolCallCount(message); as count) {
           <span class="bubble__tools">
             <mat-icon inline>build</mat-icon>
-            {{ count }} tool call{{ count > 1 ? 's' : '' }}
+            {{ i18n.t(count === 1 ? 'assistant.tools.one' : 'assistant.tools.other', { count }) }}
           </span>
         }
       </article>
@@ -74,7 +73,7 @@
     @if (agui.activeTool(); as tool) {
       <div class="assistant__tool">
         <mat-icon inline>travel_explore</mat-icon>
-        Running <code>{{ tool }}</code>…
+        {{ i18n.t('assistant.running', { tool }) }}
       </div>
     }
 
@@ -88,7 +87,7 @@
 
   <form class="assistant__composer" (ngSubmit)="submit()">
     <mat-form-field appearance="outline" subscriptSizing="dynamic" class="assistant__input">
-      <mat-label>Message the assistant</mat-label>
+      <mat-label>{{ i18n.t('assistant.message') }}</mat-label>
       <textarea
         matInput
         rows="2"
@@ -100,7 +99,12 @@
     </mat-form-field>
 
     @if (agui.isRunning()) {
-      <button matFab type="button" aria-label="Stop generating" (click)="agui.abort()">
+      <button
+        matFab
+        type="button"
+        [attr.aria-label]="i18n.t('assistant.stop')"
+        (click)="agui.abort()"
+      >
         <mat-icon>stop</mat-icon>
       </button>
     } @else {
@@ -108,7 +112,7 @@
         matFab
         class="tp-yellow-button"
         type="submit"
-        aria-label="Send message"
+        [attr.aria-label]="i18n.t('assistant.send')"
         [disabled]="!draft().trim()"
       >
         <mat-icon>send</mat-icon>

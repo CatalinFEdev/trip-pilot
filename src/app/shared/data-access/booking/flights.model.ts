@@ -1,3 +1,13 @@
+export interface FlightLeg {
+  flightNumber: string;
+  origin: string;
+  destination: string;
+  departure: string;
+  arrival: string;
+  durationMinutes: number;
+  stops: number;
+}
+
 export interface FlightOffer {
   id: string;
   airline: string;
@@ -10,6 +20,10 @@ export interface FlightOffer {
   stops: number;
   cabin: string;
   priceEur: number;
+  /** Number of travellers this offer's price was calculated for. */
+  passengers: number;
+  /** Present only for round trips (a return date was selected). */
+  returnLeg?: FlightLeg;
 }
 
 export interface StayOffer {
@@ -32,7 +46,7 @@ export interface TaxiQuote {
   pickUpTime: string;
   passengers: number;
   estimatedPriceEur: number;
-  status: 'waitlisted';
+  status: 'demo_estimate';
 }
 
 export interface FlightSearchCriteria {

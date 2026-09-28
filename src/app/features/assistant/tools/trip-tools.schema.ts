@@ -7,13 +7,13 @@ import { Tool } from '@ag-ui/core';
  */
 export const SEARCH_FLIGHTS = 'search_flights';
 export const SEARCH_STAYS = 'search_stays';
-export const BOOK_TAXI = 'book_taxi';
+export const REQUEST_TAXI_ESTIMATE = 'request_taxi_estimate';
 
 export const TRIP_TOOLS: Tool[] = [
   {
     name: SEARCH_FLIGHTS,
     description:
-      'Search bookable flights between two cities or airports for a given date. ' +
+      'Search demo flight offers between two cities or airports for a given date. ' +
       'Use whenever the traveller asks about flying somewhere.',
     parameters: {
       type: 'object',
@@ -23,7 +23,10 @@ export const TRIP_TOOLS: Tool[] = [
           description: 'Origin city name or IATA code, e.g. "Bucharest" or "OTP".',
         },
         destination: { type: 'string', description: 'Destination city name or IATA code.' },
-        departureDate: { type: 'string', description: 'Departure date in ISO format (YYYY-MM-DD).' },
+        departureDate: {
+          type: 'string',
+          description: 'Departure date in ISO format (YYYY-MM-DD).',
+        },
         returnDate: {
           type: 'string',
           description: 'Optional return date in ISO format (YYYY-MM-DD).',
@@ -56,10 +59,10 @@ export const TRIP_TOOLS: Tool[] = [
     },
   },
   {
-    name: BOOK_TAXI,
+    name: REQUEST_TAXI_ESTIMATE,
     description:
-      'Request an airport pick-up taxi. Roadmap feature: currently returns a waitlist ' +
-      'confirmation instead of a real booking.',
+      'Create a non-binding airport transfer demo estimate. This never makes a reservation or ' +
+      'contacts a transport supplier.',
     parameters: {
       type: 'object',
       properties: {

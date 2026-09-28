@@ -1,7 +1,7 @@
 <section class="page-head tp-brand-surface">
   <div class="page-head__inner">
-    <h1><mat-icon>hotel</mat-icon> Stays</h1>
-    <p>Hotels, apartments and villas — filtered by budget, sorted by guest rating.</p>
+    <h1><mat-icon>hotel</mat-icon> {{ i18n.t('stays.title') }}</h1>
+    <p>{{ i18n.t('stays.description') }}</p>
   </div>
 </section>
 
@@ -9,73 +9,89 @@
   <mat-card appearance="outlined" class="search-card">
     <form [formGroup]="form" (ngSubmit)="search()" class="search-form">
       <mat-form-field appearance="outline">
-        <mat-label>City</mat-label>
-        <input matInput formControlName="city" placeholder="Where are you going?" />
+        <mat-label>{{ i18n.t('stays.city') }}</mat-label>
+        <mat-select formControlName="city">
+          @for (town of towns; track town) {
+            <mat-option [value]="town">{{ town }}</mat-option>
+          }
+        </mat-select>
         <mat-icon matSuffix>location_city</mat-icon>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Check-in</mat-label>
+        <mat-label>{{ i18n.t('stays.checkIn') }}</mat-label>
         <input matInput [matDatepicker]="inPicker" formControlName="checkIn" />
         <mat-datepicker-toggle matIconSuffix [for]="inPicker" />
         <mat-datepicker #inPicker />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Check-out</mat-label>
+        <mat-label>{{ i18n.t('stays.checkOut') }}</mat-label>
         <input matInput [matDatepicker]="outPicker" formControlName="checkOut" />
         <mat-datepicker-toggle matIconSuffix [for]="outPicker" />
         <mat-datepicker #outPicker />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Guests</mat-label>
+        <mat-label>{{ i18n.t('stays.guests') }}</mat-label>
         <input matInput type="number" min="1" formControlName="guests" />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Max € / night</mat-label>
+        <mat-label>{{ i18n.t('stays.maxNightly') }}</mat-label>
         <input matInput type="number" min="0" formControlName="maxNightlyPrice" />
       </mat-form-field>
 
       <button matButton="filled" class="tp-yellow-button search-form__submit" type="submit">
         <mat-icon>search</mat-icon>
-        Search
+        {{ i18n.t('common.search') }}
       </button>
     </form>
   </mat-card>
 
   @if (results().length) {
-    <h2 class="tp-section-title results__title">{{ results().length }} places to stay</h2>
+    <h2 class="tp-section-title results__title">
+      {{ i18n.t('stays.found', { count: results().length }) }}
+    </h2>
     <div class="results">
       @for (offer of results(); track offer.id) {
         <mat-card appearance="outlined" class="stay">
           <div class="stay__thumb tp-brand-surface">
-            <mat-icon>{{ offer.kind === 'apartment' ? 'apartment' : offer.kind === 'villa' ? 'villa' : 'hotel' }}</mat-icon>
+            <mat-icon>{{
+              offer.kind === 'apartment' ? 'apartment' : offer.kind === 'villa' ? 'villa' : 'hotel'
+            }}</mat-icon>
             <span class="stay__rating">{{ offer.rating }}</span>
           </div>
           <mat-card-content class="stay__body">
             <h3>{{ offer.name }}</h3>
-            <small>{{ offer.kind | titlecase }} · {{ offer.city }} · {{ offer.reviews }} reviews</small>
+            <small>
+              {{ i18n.t('kinds.' + offer.kind) }} · {{ offer.city }} ·
+              {{ i18n.t('stays.reviews', { count: i18n.formatNumber(offer.reviews) }) }}
+            </small>
             <mat-chip-set>
               @for (amenity of offer.amenities; track amenity) {
-                <mat-chip>{{ amenity }}</mat-chip>
+                <mat-chip>{{ i18n.t('amenities.' + amenity) }}</mat-chip>
               }
             </mat-chip-set>
           </mat-card-content>
           <div class="stay__cta">
             <div>
-              <strong>€{{ offer.nightlyPriceEur | number: '1.0-0' }}</strong>
-              <small>per night · €{{ offer.totalPriceEur | number: '1.0-0' }} for {{ offer.nights }} nights</small>
+              <strong>{{ i18n.formatCurrency(offer.nightlyPriceEur) }}</strong>
+              <small>
+                {{ i18n.t('stays.perNight') }} · {{ i18n.formatCurrency(offer.totalPriceEur) }}
+                {{ i18n.t('stays.forNights', { count: offer.nights }) }}
+              </small>
             </div>
-            <button matButton="filled" type="button" (click)="select(offer)">Reserve</button>
+            <button matButton="filled" type="button" (click)="select(offer)">
+              {{ i18n.t('stays.explore') }}
+            </button>
           </div>
         </mat-card>
       }
     </div>
   } @else if (searched()) {
     <p class="tp-section-subtitle">
-      Nothing matched that budget. Try raising the nightly cap or changing dates.
+      {{ i18n.t('stays.empty') }}
     </p>
   }
 </div>

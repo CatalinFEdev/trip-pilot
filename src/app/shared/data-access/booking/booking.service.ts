@@ -6,7 +6,7 @@ import {
   StaySearchCriteria,
   TaxiQuote,
   TaxiRequest,
-} from './models/booking.models';
+} from './flights.model';
 
 const AIRLINES = [
   ['Wizz Air', 'W6'],
@@ -53,7 +53,7 @@ function nightsBetween(checkIn: string, checkOut: string): number {
 }
 
 /**
- * Demo booking backend. Replace the bodies with real supplier APIs
+ * Demo search backend. Replace the bodies with real supplier APIs
  * (Amadeus / Duffel / Booking.com …) without touching the AG-UI layer.
  */
 @Injectable({ providedIn: 'root' })
@@ -64,7 +64,7 @@ export class BookingService {
 
   searchFlights(criteria: FlightSearchCriteria): FlightOffer[] {
     const rand = seedFrom(
-      `${criteria.origin}|${criteria.destination}|${criteria.departureDate}|${criteria.cabin ?? 'economy'}`,
+      `${criteria.origin}|${criteria.destination}|${criteria.departureDate}|${criteria.returnDate ?? ''}|${criteria.cabin ?? 'economy'}`,
     );
     const passengers = criteria.passengers ?? 1;
     const offers: FlightOffer[] = Array.from({ length: 5 }, (_, i) => {
@@ -76,7 +76,26 @@ export class BookingService {
       departure.setUTCHours(departHour, departMinute, 0, 0);
       const arrival = new Date(departure.getTime() + durationMinutes * 60_000);
       const stops = durationMinutes > 240 ? 1 : 0;
-      const base = 39 + Math.round(rand() * 260) + stops * 20;
+      let base = 39 + Math.round(rand() * 260) + stops * 20;
+
+      let returnLeg: FlightOffer['returnLeg'];
+      if (criteria.returnDate) {
+        const returnDurationMinutes = 70 + Math.floor(rand() * 260);
+        const returnDeparture = new Date(`${criteria.returnDate}T00:00:00Z`);
+        returnDeparture.setUTCHours(6 + Math.floor(rand() * 14), Math.floor(rand() * 4) * 15, 0, 0);
+        const returnStops = returnDurationMinutes > 240 ? 1 : 0;
+        base += 39 + Math.round(rand() * 260) + returnStops * 20;
+
+        returnLeg = {
+          flightNumber: `${code}${100 + Math.floor(rand() * 899)}`,
+          origin: criteria.destination,
+          destination: criteria.origin,
+          departure: returnDeparture.toISOString(),
+          arrival: new Date(returnDeparture.getTime() + returnDurationMinutes * 60_000).toISOString(),
+          durationMinutes: returnDurationMinutes,
+          stops: returnStops,
+        };
+      }
 
       return {
         id: `${code}-${criteria.departureDate}-${i}`,
@@ -90,6 +109,8 @@ export class BookingService {
         stops,
         cabin: criteria.cabin ?? 'economy',
         priceEur: base * passengers,
+        passengers,
+        returnLeg,
       };
     }).sort((a, b) => a.priceEur - b.priceEur);
 
@@ -109,7 +130,13 @@ export class BookingService {
       return {
         id: `${criteria.city.toLowerCase().replace(/\s+/g, '-')}-${i}`,
         name: `${['Aurora', 'Central', 'Blue Harbour', 'Old Town', 'Riverside', 'Sunrise'][i % 6]} ${
-          kind === 'hotel' ? 'Hotel' : kind === 'apartment' ? 'Residence' : kind === 'villa' ? 'Villa' : 'Hostel'
+          kind === 'hotel'
+            ? 'Hotel'
+            : kind === 'apartment'
+              ? 'Residence'
+              : kind === 'villa'
+                ? 'Villa'
+                : 'Hostel'
         }`,
         city: criteria.city,
         kind,
@@ -131,7 +158,7 @@ export class BookingService {
     return offers;
   }
 
-  /** Roadmap feature — records interest and returns an estimate. */
+  /** Roadmap feature — records a transient demo request and returns an estimate. */
   requestTaxi(request: TaxiRequest): TaxiQuote {
     const rand = seedFrom(`${request.airport}|${request.dropOffAddress}|${request.pickUpTime}`);
     const quote: TaxiQuote = {
@@ -141,7 +168,7 @@ export class BookingService {
       pickUpTime: request.pickUpTime,
       passengers: request.passengers ?? 1,
       estimatedPriceEur: 18 + Math.round(rand() * 45),
-      status: 'waitlisted',
+      status: 'demo_estimate',
     };
     this.taxiWaitlist.update((list) => [quote, ...list]);
     return quote;

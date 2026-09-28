@@ -1,0 +1,129 @@
+<section class="plan">
+  <header class="plan__header">
+    <mat-icon>luggage</mat-icon>
+    <strong>{{ i18n.t('plan.title') }}</strong>
+    @if (!plan.isEmpty()) {
+      <button
+        matIconButton
+        type="button"
+        class="plan__clear"
+        [attr.aria-label]="i18n.t('plan.clear')"
+        [matTooltip]="i18n.t('plan.clear')"
+        (click)="plan.clear()"
+      >
+        <mat-icon>delete_sweep</mat-icon>
+      </button>
+    }
+  </header>
+
+  <div class="plan__scroll">
+    @if (plan.isEmpty()) {
+      <p class="plan__empty">{{ i18n.t('plan.empty') }}</p>
+    } @else {
+      <ul class="plan__items">
+        <li class="plan__item">
+          <mat-icon [class.plan__icon--set]="plan.flight()">flight_takeoff</mat-icon>
+          <div class="plan__details">
+            <small>{{ i18n.t('plan.flight') }}</small>
+            @if (plan.flight(); as flight) {
+              <span>
+                {{ flight.airline }} {{ flight.flightNumber }} · {{ flight.origin }} →
+                {{ flight.destination }}
+              </span>
+              <small>
+                {{ i18n.formatDate(flight.departure) }} {{ i18n.formatTime(flight.departure) }} ·
+                {{ i18n.formatCurrency(flight.priceEur) }}
+              </small>
+            } @else {
+              <span class="plan__unset">{{ i18n.t('plan.emptyItem') }}</span>
+            }
+          </div>
+          @if (plan.flight()) {
+            <button
+              matIconButton
+              type="button"
+              [attr.aria-label]="i18n.t('plan.remove')"
+              (click)="plan.removeFlight()"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+        </li>
+
+        <li class="plan__item">
+          <mat-icon [class.plan__icon--set]="plan.stay()">hotel</mat-icon>
+          <div class="plan__details">
+            <small>{{ i18n.t('plan.stay') }}</small>
+            @if (plan.stay(); as stay) {
+              <span>{{ stay.name }} · {{ stay.city }}</span>
+              <small>
+                {{ i18n.t('stays.forNights', { count: stay.nights }) }} ·
+                {{ i18n.formatCurrency(stay.totalPriceEur) }}
+              </small>
+            } @else {
+              <span class="plan__unset">{{ i18n.t('plan.emptyItem') }}</span>
+            }
+          </div>
+          @if (plan.stay()) {
+            <button
+              matIconButton
+              type="button"
+              [attr.aria-label]="i18n.t('plan.remove')"
+              (click)="plan.removeStay()"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+        </li>
+
+        <li class="plan__item">
+          <mat-icon [class.plan__icon--set]="plan.taxi()">local_taxi</mat-icon>
+          <div class="plan__details">
+            <small>{{ i18n.t('plan.taxi') }}</small>
+            @if (plan.taxi(); as taxi) {
+              <span>{{ taxi.airport }} → {{ taxi.dropOffAddress }}</span>
+              <small>
+                {{ taxi.pickUpTime }} · {{ i18n.formatCurrency(taxi.estimatedPriceEur) }}
+              </small>
+            } @else {
+              <span class="plan__unset">{{ i18n.t('plan.emptyItem') }}</span>
+            }
+          </div>
+          @if (plan.taxi()) {
+            <button
+              matIconButton
+              type="button"
+              [attr.aria-label]="i18n.t('plan.remove')"
+              (click)="plan.removeTaxi()"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+        </li>
+      </ul>
+    }
+  </div>
+
+  <footer class="plan__footer">
+    <div class="plan__total">
+      <small>{{ i18n.t('plan.total') }}</small>
+      <strong>{{ i18n.formatCurrency(plan.totalEur()) }}</strong>
+    </div>
+    <button
+      matButton="filled"
+      type="button"
+      class="tp-yellow-button"
+      [disabled]="plan.isEmpty()"
+      (click)="save()"
+    >
+      <mat-icon>bookmark_added</mat-icon>
+      {{ i18n.t('plan.save') }}
+    </button>
+  </footer>
+
+  @if (plan.savedAt(); as savedAt) {
+    <small class="plan__saved-at">
+      {{ i18n.t('plan.savedAt', { date: i18n.formatDate(savedAt) }) }}
+    </small>
+  }
+</section>

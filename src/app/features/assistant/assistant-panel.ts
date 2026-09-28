@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, effect, ElementRef, inject, signal, viewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  inject,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,12 +18,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Message } from '@ag-ui/core';
 import { AgUiService } from '../../core/ag-ui/ag-ui.service';
-
-const SUGGESTIONS = [
-  'Find me a flight from Bucharest to Lisbon on 12 June',
-  'Where should I stay in Porto for 3 nights under 120 EUR?',
-  'Plan a 4-day trip to Vienna: flights and a central hotel',
-];
+import { I18nService } from '../../core/i18n/i18n.service';
 
 @Component({
   selector: 'tp-assistant-panel',
@@ -34,12 +38,17 @@ const SUGGESTIONS = [
 })
 export class AssistantPanel {
   protected readonly agui = inject(AgUiService);
-  protected readonly suggestions = SUGGESTIONS;
+  protected readonly i18n = inject(I18nService);
   protected readonly draft = signal('');
 
   private readonly scroller = viewChild<ElementRef<HTMLElement>>('scroller');
 
   protected readonly hasConversation = computed(() => this.agui.visibleMessages().length > 0);
+  protected readonly suggestions = computed(() => [
+    this.i18n.t('assistant.suggestion.flight'),
+    this.i18n.t('assistant.suggestion.stay'),
+    this.i18n.t('assistant.suggestion.trip'),
+  ]);
 
   constructor() {
     effect(() => {

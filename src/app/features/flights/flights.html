@@ -1,7 +1,7 @@
 <section class="page-head tp-brand-surface">
   <div class="page-head__inner">
-    <h1><mat-icon>flight_takeoff</mat-icon> Flights</h1>
-    <p>Compare fares, or just ask the assistant on the right to do it for you.</p>
+    <h1><mat-icon>flight_takeoff</mat-icon> {{ i18n.t('flights.title') }}</h1>
+    <p>{{ i18n.t('flights.description') }}</p>
   </div>
 </section>
 
@@ -9,54 +9,64 @@
   <mat-card appearance="outlined" class="search-card">
     <form [formGroup]="form" (ngSubmit)="search()" class="search-form">
       <mat-form-field appearance="outline">
-        <mat-label>From</mat-label>
-        <input matInput formControlName="origin" placeholder="City or airport" />
+        <mat-label>{{ i18n.t('flights.from') }}</mat-label>
+        <mat-select formControlName="origin">
+          @for (town of towns; track town) {
+            <mat-option [value]="town">{{ town }}</mat-option>
+          }
+        </mat-select>
         <mat-icon matSuffix>flight_takeoff</mat-icon>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>To</mat-label>
-        <input matInput formControlName="destination" placeholder="City or airport" />
+        <mat-label>{{ i18n.t('flights.to') }}</mat-label>
+        <mat-select formControlName="destination">
+          @for (town of towns; track town) {
+            <mat-option [value]="town">{{ town }}</mat-option>
+          }
+        </mat-select>
         <mat-icon matSuffix>flight_land</mat-icon>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Departure</mat-label>
+        <mat-label>{{ i18n.t('flights.departure') }}</mat-label>
         <input matInput [matDatepicker]="depPicker" formControlName="departureDate" />
         <mat-datepicker-toggle matIconSuffix [for]="depPicker" />
         <mat-datepicker #depPicker />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Return (optional)</mat-label>
+        <mat-label>{{ i18n.t('flights.return') }}</mat-label>
         <input matInput [matDatepicker]="retPicker" formControlName="returnDate" />
         <mat-datepicker-toggle matIconSuffix [for]="retPicker" />
         <mat-datepicker #retPicker />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="search-form__narrow">
-        <mat-label>Travellers</mat-label>
+        <mat-label>{{ i18n.t('flights.travellers') }}</mat-label>
         <input matInput type="number" min="1" formControlName="passengers" />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="search-form__narrow">
-        <mat-label>Cabin</mat-label>
+        <mat-label>{{ i18n.t('flights.cabin') }}</mat-label>
         <mat-select formControlName="cabin">
           @for (cabin of cabins; track cabin) {
-            <mat-option [value]="cabin">{{ cabin | titlecase }}</mat-option>
+            <mat-option [value]="cabin">{{ i18n.t('cabins.' + cabin) }}</mat-option>
           }
         </mat-select>
       </mat-form-field>
 
       <button matButton="filled" class="tp-yellow-button search-form__submit" type="submit">
         <mat-icon>search</mat-icon>
-        Search
+        {{ i18n.t('common.search') }}
       </button>
     </form>
   </mat-card>
 
   @if (results().length) {
-    <h2 class="tp-section-title results__title">{{ results().length }} flights found</h2>
+    <h2 class="tp-section-title results__title">
+      {{ i18n.t('flights.found', { count: results().length }) }}
+    </h2>
     <div class="results">
       @for (offer of results(); track offer.id) {
         <mat-card appearance="outlined" class="offer">
@@ -65,35 +75,73 @@
               <mat-icon>airlines</mat-icon>
               <div>
                 <strong>{{ offer.airline }}</strong>
-                <small>{{ offer.flightNumber }} · {{ offer.cabin | titlecase }}</small>
+                <small>{{ offer.flightNumber }} · {{ i18n.t('cabins.' + offer.cabin) }}</small>
               </div>
             </div>
 
-            <div class="offer__times">
-              <div>
-                <strong>{{ offer.departure | date: 'HH:mm' }}</strong>
-                <small>{{ offer.origin }}</small>
+            <div class="offer__legs">
+              @if (offer.returnLeg) {
+                <span class="offer__leg-label">{{ i18n.t('flights.outbound') }}</span>
+              }
+              <div class="offer__times">
+                <div>
+                  <strong>{{ i18n.formatTime(offer.departure) }}</strong>
+                  <small>{{ offer.origin }}</small>
+                </div>
+                <div class="offer__line">
+                  <span>{{ duration(offer.durationMinutes) }}</span>
+                  <mat-icon>trending_flat</mat-icon>
+                  <small>{{
+                    offer.stops === 0
+                      ? i18n.t('common.direct')
+                      : i18n.t(offer.stops === 1 ? 'common.stop' : 'common.stops', {
+                          count: offer.stops,
+                        })
+                  }}</small>
+                </div>
+                <div>
+                  <strong>{{ i18n.formatTime(offer.arrival) }}</strong>
+                  <small>{{ offer.destination }}</small>
+                </div>
               </div>
-              <div class="offer__line">
-                <span>{{ duration(offer.durationMinutes) }}</span>
-                <mat-icon>trending_flat</mat-icon>
-                <small>{{ offer.stops === 0 ? 'Direct' : offer.stops + ' stop' }}</small>
-              </div>
-              <div>
-                <strong>{{ offer.arrival | date: 'HH:mm' }}</strong>
-                <small>{{ offer.destination }}</small>
-              </div>
+
+              @if (offer.returnLeg; as ret) {
+                <span class="offer__leg-label">{{ i18n.t('flights.inbound') }}</span>
+                <div class="offer__times">
+                  <div>
+                    <strong>{{ i18n.formatTime(ret.departure) }}</strong>
+                    <small>{{ ret.origin }}</small>
+                  </div>
+                  <div class="offer__line">
+                    <span>{{ duration(ret.durationMinutes) }}</span>
+                    <mat-icon>trending_flat</mat-icon>
+                    <small>{{
+                      ret.stops === 0
+                        ? i18n.t('common.direct')
+                        : i18n.t(ret.stops === 1 ? 'common.stop' : 'common.stops', {
+                            count: ret.stops,
+                          })
+                    }}</small>
+                  </div>
+                  <div>
+                    <strong>{{ i18n.formatTime(ret.arrival) }}</strong>
+                    <small>{{ ret.destination }}</small>
+                  </div>
+                </div>
+              }
             </div>
           </div>
 
           <div class="offer__cta">
-            <span class="offer__price">€{{ offer.priceEur | number: '1.0-0' }}</span>
-            <button matButton="filled" type="button" (click)="select(offer)">Select</button>
+            <span class="offer__price">{{ i18n.formatCurrency(offer.priceEur) }}</span>
+            <button matButton="filled" type="button" (click)="select(offer)">
+              {{ i18n.t('common.select') }}
+            </button>
           </div>
         </mat-card>
       }
     </div>
   } @else if (searched()) {
-    <p class="tp-section-subtitle">No flights matched that search. Try different dates.</p>
+    <p class="tp-section-subtitle">{{ i18n.t('flights.empty') }}</p>
   }
 </div>

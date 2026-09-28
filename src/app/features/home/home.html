@@ -1,37 +1,34 @@
 <section class="hero tp-brand-surface">
   <div class="hero__inner">
-    <span class="hero__eyebrow">AI travel concierge</span>
-    <h1>Plan it once.<br />Fly, stay and ride.</h1>
-    <p>
-      TripPilot connects Angular to your favourite LLM through the
-      <strong>AG-UI protocol</strong>, so booking a flight or a hotel is just a conversation.
-    </p>
+    <span class="hero__eyebrow">{{ i18n.t('home.eyebrow') }}</span>
+    <h1>{{ i18n.t('home.title') }}</h1>
+    <p>{{ i18n.t('home.description') }}</p>
     <div class="hero__actions">
       <a matButton="filled" class="tp-yellow-button" routerLink="/flights">
         <mat-icon>flight_takeoff</mat-icon>
-        Search flights
+        {{ i18n.t('home.searchFlights') }}
       </a>
       <a matButton="outlined" class="hero__ghost" routerLink="/stays">
         <mat-icon>hotel</mat-icon>
-        Find a stay
+        {{ i18n.t('home.findStay') }}
       </a>
     </div>
   </div>
 </section>
 
 <div class="tp-section">
-  <h2 class="tp-section-title">What you can book</h2>
-  <p class="tp-section-subtitle">Two services live today, one on the way.</p>
+  <h2 class="tp-section-title">{{ i18n.t('home.servicesTitle') }}</h2>
+  <p class="tp-section-subtitle">{{ i18n.t('home.servicesSubtitle') }}</p>
 
   <div class="cards">
-    @for (feature of features; track feature.title) {
+    @for (feature of features(); track feature.title) {
       <mat-card appearance="outlined" class="card" [class.card--soon]="!feature.available">
         <mat-card-content>
           <mat-icon class="card__icon">{{ feature.icon }}</mat-icon>
           <h3>
             {{ feature.title }}
             @if (!feature.available) {
-              <span class="card__badge">Soon</span>
+              <span class="card__badge">{{ i18n.t('common.soon') }}</span>
             }
           </h3>
           <p>{{ feature.text }}</p>
@@ -43,14 +40,11 @@
     }
   </div>
 
-  <h2 class="tp-section-title steps__title">How the assistant works</h2>
-  <p class="tp-section-subtitle">
-    Every message is an AG-UI run: events stream in, tools execute in the browser, results come back
-    to the model.
-  </p>
+  <h2 class="tp-section-title steps__title">{{ i18n.t('home.assistantTitle') }}</h2>
+  <p class="tp-section-subtitle">{{ i18n.t('home.assistantSubtitle') }}</p>
 
   <ol class="steps">
-    @for (step of steps; track step.title) {
+    @for (step of steps(); track step.title) {
       <li>
         <mat-icon>{{ step.icon }}</mat-icon>
         <div>

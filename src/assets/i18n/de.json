@@ -1,0 +1,180 @@
+{
+  "language": {
+    "english": "English",
+    "german": "Deutsch"
+  },
+  "nav": {
+    "home": "Startseite",
+    "flights": "Flüge",
+    "stays": "Unterkünfte",
+    "taxi": "Flughafentransfer"
+  },
+  "common": {
+    "soon": "Bald",
+    "search": "Suchen",
+    "select": "Auswählen",
+    "close": "Schließen",
+    "gotIt": "Verstanden",
+    "direct": "Direkt",
+    "stop": "{count} Stopp",
+    "stops": "{count} Stopps",
+    "passenger": "{count} Fahrgast",
+    "passengers": "{count} Fahrgäste"
+  },
+  "shell": {
+    "toggleAssistant": "KI-Reiseassistent ein- oder ausblenden",
+    "assistant": "Assistent",
+    "footer": "Entdecken Sie Flüge, Unterkünfte und Flughafentransfers mit KI-Unterstützung.",
+    "poweredBy": "Unterstützt durch das AG-UI-Protokoll"
+  },
+  "home": {
+    "eyebrow": "KI-Reisebegleitung",
+    "title": "Einmal planen. Fliegen, übernachten und weiterfahren.",
+    "description": "TripPilot verbindet sich über das AG-UI-Protokoll mit Ihrem bevorzugten LLM, damit Reiseplanung zum Gespräch wird.",
+    "searchFlights": "Flüge suchen",
+    "findStay": "Unterkunft finden",
+    "servicesTitle": "Reise planen",
+    "servicesSubtitle": "Vergleichen Sie Reiseoptionen und planen Sie Ihre Route.",
+    "assistantTitle": "So funktioniert der Assistent",
+    "assistantSubtitle": "Jede Nachricht ist ein AG-UI-Lauf: Ereignisse werden gestreamt, Tools im Browser ausgeführt und Ergebnisse an das Modell zurückgegeben.",
+    "flight": {
+      "title": "Flug finden",
+      "text": "Vergleichen Sie Tarife verschiedener Airlines und finden Sie passende Verbindungen."
+    },
+    "stay": {
+      "title": "Unterkunft finden",
+      "text": "Hotels, Apartments und Villen in jeder Stadt, gefiltert nach Budget und Bewertung."
+    },
+    "taxi": {
+      "title": "Flughafentransfer",
+      "text": "Ein Transfer passend zu Ihrer Ankunfts- oder Abfahrtszeit. Bald verfügbar.",
+      "cta": "Transfers entdecken"
+    },
+    "step": {
+      "describe": {
+        "title": "Reise beschreiben",
+        "text": "In Alltagssprache, zum Beispiel: „Wien, erstes Juniwochenende, zwei Personen“."
+      },
+      "stream": {
+        "title": "AG-UI streamt die Reiseplanung",
+        "text": "Der Agent streamt Ereignisse, Status und Tool-Aufrufe direkt in die Oberfläche."
+      },
+      "confirm": {
+        "title": "Sie entscheiden",
+        "text": "TripPilot hilft beim Vergleichen; hier wird keine Reservierung vorgenommen."
+      }
+    }
+  },
+  "flights": {
+    "title": "Flüge",
+    "description": "Vergleichen Sie verfügbare Tarife oder lassen Sie den Assistenten Optionen recherchieren.",
+    "from": "Von",
+    "to": "Nach",
+    "cityOrAirport": "Stadt oder Flughafen",
+    "departure": "Hinflug",
+    "return": "Rückflug (optional)",
+    "outbound": "Hinflug",
+    "inbound": "Rückflug",
+    "travellers": "Reisende",
+    "cabin": "Klasse",
+    "found": "{count} Flüge gefunden",
+    "empty": "Keine Flüge für diese Suche gefunden. Versuchen Sie andere Daten.",
+    "selected": "{flight} wurde Ihrem Reiseplan hinzugefügt — {price}."
+  },
+  "stays": {
+    "title": "Unterkünfte",
+    "description": "Hotels, Apartments und Villen, gefiltert nach Budget und Gästebewertung.",
+    "city": "Stadt",
+    "where": "Wohin reisen Sie?",
+    "checkIn": "Anreise",
+    "checkOut": "Abreise",
+    "guests": "Gäste",
+    "maxNightly": "Max. Preis / Nacht",
+    "found": "{count} Unterkünfte gefunden",
+    "empty": "Nichts für dieses Budget gefunden. Erhöhen Sie das Nachtbudget oder ändern Sie die Daten.",
+    "perNight": "pro Nacht",
+    "forNights": "für {count} Nächte",
+    "explore": "Zum Reiseplan hinzufügen",
+    "selected": "{name} wurde Ihrem Reiseplan hinzugefügt — insgesamt {price}.",
+    "reviews": "{count} Bewertungen"
+  },
+  "taxi": {
+    "badge": "Bald verfügbar",
+    "title": "Flughafentransfer",
+    "description": "Die Planung von Flughafentransfers kommt bald. Mit einer Demoanfrage können Sie die Erfahrung vorab ansehen.",
+    "building": "Was wir entwickeln",
+    "demoRequest": "Demoanfrage erstellen",
+    "arrivalCity": "Ankunftsstadt",
+    "airport": "Ankunftsflughafen",
+    "airportPlaceholder": "z. B. OTP",
+    "dropOff": "Zieladresse",
+    "pickUpDate": "Abholdatum",
+    "pickUpHour": "Stunde",
+    "pickUpMinute": "Minute",
+    "passengers": "Fahrgäste",
+    "submit": "Schätzung anzeigen",
+    "requests": "Ihre Demoanfragen",
+    "status": "Demonstrationsschätzung",
+    "estimate": "Demonstrationsschätzung: {price}. Es wurde kein Transfer reserviert.",
+    "roadmap": {
+      "landing": "Abholzeit passend zu Ihrer geplanten Landung.",
+      "fare": "Unverbindlicher Preis vor der Weiterleitung an einen Anbieter.",
+      "vehicle": "Fahrzeugoptionen passend zu Reisenden und Gepäck."
+    }
+  },
+  "assistant": {
+    "title": "Reiseassistent",
+    "newConversation": "Neue Unterhaltung beginnen",
+    "model": "Modell",
+    "empty": "Fragen Sie nach Ihrer Reise. Der Assistent kann bei Flügen, Unterkünften und geplanten Flughafentransfers helfen.",
+    "tools": {
+      "one": "{count} Tool-Aufruf",
+      "other": "{count} Tool-Aufrufe"
+    },
+    "running": "{tool} wird ausgeführt…",
+    "message": "Nachricht an den Assistenten",
+    "stop": "Generierung stoppen",
+    "send": "Nachricht senden",
+    "suggestion": {
+      "flight": "Finde Flüge von Bukarest nach Lissabon am 12. Juni",
+      "stay": "Wo kann ich in Porto für 3 Nächte unter 120 EUR übernachten?",
+      "trip": "Plane eine 4-tägige Reise nach Wien mit Flügen und einem zentralen Hotel"
+    }
+  },
+  "plan": {
+    "title": "Reiseplan",
+    "flight": "Flug",
+    "stay": "Unterkunft",
+    "taxi": "Flughafentransfer",
+    "empty": "Wählen Sie einen Flug, eine Unterkunft oder einen Transfer aus – Ihre Auswahl erscheint hier.",
+    "emptyItem": "Noch nicht ausgewählt",
+    "total": "Geschätzte Gesamtsumme",
+    "save": "Reise speichern",
+    "saved": "Reiseplan auf diesem Gerät gespeichert.",
+    "savedAt": "Gespeichert am {date}",
+    "clear": "Reiseplan leeren",
+    "remove": "Aus dem Reiseplan entfernen"
+  },
+  "cabins": {
+    "economy": "Economy",
+    "premium": "Premium Economy",
+    "business": "Business",
+    "first": "First"
+  },
+  "kinds": {
+    "hotel": "Hotel",
+    "apartment": "Apartment",
+    "hostel": "Hostel",
+    "villa": "Villa"
+  },
+  "amenities": {
+    "Free WiFi": "Kostenloses WLAN",
+    "Breakfast included": "Frühstück inklusive",
+    "Airport shuttle": "Flughafenshuttle",
+    "Air conditioning": "Klimaanlage",
+    "Parking": "Parkplatz",
+    "Pool": "Pool",
+    "Gym": "Fitnessraum",
+    "Pet friendly": "Haustierfreundlich"
+  }
+}
