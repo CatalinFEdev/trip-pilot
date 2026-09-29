@@ -3,7 +3,7 @@ import { AgUiConfig } from './ag-ui.model';
 
 /** LLM providers exposed in the assistant panel via the AG-UI protocol. */
 export const AG_UI_APP_CONFIG: AgUiConfig = {
-  defaultProviderId: 'local',
+  defaultProviderId: 'anthropic',
   providers: [
     {
       id: 'openai',
@@ -11,13 +11,14 @@ export const AG_UI_APP_CONFIG: AgUiConfig = {
       vendor: 'OpenAI',
       model: 'gpt-4.1',
       url: '/api/agui/openai',
+      disabled: true,
       description: 'Balanced reasoning, strong tool use.',
     },
     {
       id: 'anthropic',
       label: 'Claude',
       vendor: 'Anthropic',
-      model: 'claude-sonnet-4',
+      model: 'claude-sonnet-4-5',
       url: '/api/agui/anthropic',
       description: 'Long itineraries and careful planning.',
     },
@@ -27,6 +28,7 @@ export const AG_UI_APP_CONFIG: AgUiConfig = {
       vendor: 'Google',
       model: 'gemini-2.5-pro',
       url: '/api/agui/gemini',
+      disabled: true,
       description: 'Fast, multimodal, great with maps.',
     },
     {

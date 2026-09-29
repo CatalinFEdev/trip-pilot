@@ -1,0 +1,4 @@
+RewriteEngine On
+
+RewriteRule ^anthropic/?$ anthropic/index.php [L]
+RewriteRule ^health/?$ health/index.php [L]

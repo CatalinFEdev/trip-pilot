@@ -50,21 +50,37 @@ describe('AgUiService', () => {
       ],
     }).inject(AgUiService);
 
-  it('selects configured providers, reuses agents, and ignores invalid selections', () => {
+  it('uses Claude by default and sends its first message to the Anthropic endpoint', async () => {
     const agui = service();
 
-    agui.selectProvider('openai');
-    const openAiAgent = agentMocks[0]!;
-    expect(openAiAgent.setMessages).toHaveBeenCalledWith([]);
+    expect(agui.providerId()).toBe('anthropic');
+    await agui.send('hello');
+
+    expect(HttpAgent).toHaveBeenCalledWith(
+      expect.objectContaining({ agentId: 'anthropic', url: '/api/agui/anthropic' }),
+    );
+    expect(agentMocks[0]!.runAgent).toHaveBeenCalledOnce();
+  });
+
+  it('selects enabled providers, reuses agents, and rejects disabled or invalid selections', () => {
+    const agui = service();
 
     agui.selectProvider('local');
-    const localAgent = agentMocks[1]!;
-    agui.selectProvider('openai');
+    const localAgent = agentMocks[0]!;
+    expect(localAgent.setMessages).toHaveBeenCalledWith([]);
+    agui.selectProvider('anthropic');
+    const claudeAgent = agentMocks[1]!;
+    agui.selectProvider('local');
+    expect(localAgent.setMessages).toHaveBeenCalledTimes(2);
+    agui.selectProvider('anthropic');
+    expect(claudeAgent.setMessages).toHaveBeenCalledWith([]);
     expect(agentMocks).toHaveLength(2);
 
     agui.selectProvider('openai');
+    agui.selectProvider('gemini');
     agui.selectProvider('unknown');
-    expect(agui.providerId()).toBe('openai');
+    expect(agui.providerId()).toBe('anthropic');
+    expect(agentMocks).toHaveLength(2);
   });
 
   it('exposes only user and assistant messages', () => {
@@ -86,7 +102,7 @@ describe('AgUiService', () => {
     const agui = service();
     const tool = TestBed.inject(TripToolsService);
     const execute = vi.spyOn(tool, 'execute').mockResolvedValue('flight results');
-    const agent = (agui.selectProvider('openai'), agentMocks[0])!;
+    const agent = (agui.selectProvider('local'), agentMocks[0])!;
     agent.runAgent.mockImplementationOnce(async () => {
       const reply: AssistantMessage = {
         id: 'assistant',
@@ -114,22 +130,20 @@ describe('AgUiService', () => {
 
   it('ignores blank or concurrent sends and handles a failed run', async () => {
     const agui = service();
-    agui.selectProvider('openai');
-    const agent = agentMocks[0]!;
+    const agent = (agui.selectProvider('local'), agentMocks[0])!;
     await agui.send('   ');
     expect(agent.runAgent).not.toHaveBeenCalled();
 
     agent.runAgent.mockRejectedValueOnce(new Error('connection refused'));
     await agui.send('hello');
     expect(agui.status()).toBe('error');
-    expect(agui.error()).toContain('GPT is unreachable: connection refused');
+    expect(agui.error()).toContain('Demo is unreachable: connection refused');
     expect(agui.activeTool()).toBeNull();
   });
 
   it('ignores unanswered tool calls that are not supported', async () => {
     const agui = service();
-    agui.selectProvider('openai');
-    const agent = agentMocks[0]!;
+    const agent = (agui.selectProvider('local'), agentMocks[0])!;
     agent.runAgent.mockImplementationOnce(async () => {
       agent.messages.push({
         id: 'assistant',
@@ -152,7 +166,7 @@ describe('AgUiService', () => {
 
   it('aborts the active agent and resets the conversation', async () => {
     const agui = service();
-    agui.selectProvider('openai');
+    agui.selectProvider('local');
     const agent = agentMocks[0]!;
     await agui.send('hello');
     agui.status.set('running');
@@ -173,14 +187,40 @@ describe('AgUiService', () => {
 
   it('reports run failures received through the agent subscription', () => {
     const agui = service();
-    agui.selectProvider('openai');
+    agui.selectProvider('local');
     const subscriber = agentMocks[0]!.subscribe.mock.calls[0][0] as {
       onRunFailed: (params: { error: Error }) => void;
     };
 
     subscriber.onRunFailed({ error: new Error('server error') });
 
-    expect(agui.error()).toContain('GPT is unreachable: server error');
+    expect(agui.error()).toContain('Demo is unreachable: server error');
     expect(agui.status()).toBe('error');
+  });
+
+  it('keeps a server RUN_ERROR visible after a rejected Claude request', async () => {
+    const agui = service();
+    const message =
+      'Claude is unavailable: Anthropic rejected the request because this API account has insufficient credits. No Claude answer was generated.';
+
+    agui.selectProvider('local');
+    agui.selectProvider('anthropic');
+    const agent = agentMocks[1]!;
+    const subscriber = agent.subscribe.mock.calls[0][0] as {
+      onRunErrorEvent: (params: { event: { message: string; code: string } }) => void;
+    };
+    agent.runAgent.mockImplementationOnce(async () => {
+      subscriber.onRunErrorEvent({
+        event: { message, code: 'insufficient_credits' },
+      });
+    });
+
+    await agui.send('plan a trip');
+
+    expect(agui.error()).toBe(message);
+    expect(agui.status()).toBe('error');
+    expect(agui.visibleMessages().map((entry) => entry.role)).toEqual(['user']);
+    expect(agui.visibleMessages().filter((entry) => entry.role === 'assistant')).toHaveLength(0);
+    expect(agent.runAgent).toHaveBeenCalledOnce();
   });
 });

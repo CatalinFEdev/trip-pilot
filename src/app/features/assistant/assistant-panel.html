@@ -25,7 +25,7 @@
         [disabled]="agui.isRunning()"
       >
         @for (provider of agui.providers; track provider.id) {
-          <mat-option [value]="provider.id">
+          <mat-option [value]="provider.id" [disabled]="provider.disabled">
             {{ provider.vendor }} · {{ provider.model }}
           </mat-option>
         }
@@ -78,7 +78,7 @@
     }
 
     @if (agui.error(); as error) {
-      <div class="assistant__error">
+      <div class="assistant__error" role="alert">
         <mat-icon inline>error_outline</mat-icon>
         {{ error }}
       </div>

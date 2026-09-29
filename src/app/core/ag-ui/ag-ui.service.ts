@@ -41,7 +41,7 @@ export class AgUiService {
   );
 
   selectProvider(id: string): void {
-    if (id === this.providerId() || !this.providers.some((p) => p.id === id)) return;
+    if (id === this.providerId() || !this.providers.some((p) => p.id === id && !p.disabled)) return;
     this.providerId.set(id);
     this.agent().setMessages([...this.messages()]);
   }
@@ -91,6 +91,7 @@ export class AgUiService {
           ],
         });
 
+        if (this.status() === 'error') return;
         const executed = await this.resolvePendingToolCalls(agent);
         this.messages.set([...agent.messages]);
         if (!executed) break;
@@ -146,6 +147,10 @@ export class AgUiService {
       });
       agent.subscribe({
         onMessagesChanged: ({ messages }) => this.messages.set([...messages]),
+        onRunErrorEvent: ({ event }) => {
+          this.error.set(event.message);
+          this.status.set('error');
+        },
         onRunFailed: ({ error }) => {
           this.error.set(this.describe(error));
           this.status.set('error');

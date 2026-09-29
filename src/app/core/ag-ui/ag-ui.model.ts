@@ -10,6 +10,7 @@ export interface LlmProvider {
   model: string;
   /** URL of the AG-UI agent endpoint serving this model. */
   url: string;
+  disabled?: boolean;
   headers?: Record<string, string>;
   description?: string;
 }

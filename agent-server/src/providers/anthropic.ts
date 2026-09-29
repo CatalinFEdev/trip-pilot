@@ -1,6 +1,9 @@
 import type { RunAgentInput, Tool } from '@ag-ui/core';
 import Anthropic from '@anthropic-ai/sdk';
 import type { AgUiStream } from '../ag-ui-runtime.js';
+import { config } from "dotenv";
+
+config({ override: true });
 
 const MODEL = process.env['ANTHROPIC_MODEL'] || 'claude-sonnet-4-5';
 const MAX_TOKENS = Number(process.env['ANTHROPIC_MAX_TOKENS'] || 4096);
@@ -90,13 +93,29 @@ export async function runAnthropic(input: RunAgentInput, stream: AgUiStream): Pr
   const { system, messages } = toAnthropicMessages(input);
   const tools = toAnthropicTools(input.tools);
 
-  const response = await anthropic.messages.create({
-    model: MODEL,
-    max_tokens: MAX_TOKENS,
-    system,
-    messages,
-    tools,
-  });
+  let response: Anthropic.Message;
+  try {
+    response = await anthropic.messages.create({
+      model: MODEL,
+      max_tokens: MAX_TOKENS,
+      system,
+      messages,
+      tools,
+    });
+  } catch (error) {
+    if (
+      error instanceof Anthropic.APIError &&
+      error.status === 400 &&
+      /credit balance is too low/i.test(error.message)
+    ) {
+      stream.runError(
+        'Claude is unavailable: Anthropic rejected the request because this API account has insufficient credits. No Claude answer was generated. Add credits in Anthropic Plans & Billing and try again.',
+        'insufficient_credits',
+      );
+      return;
+    }
+    throw error;
+  }
 
   for (const block of response.content) {
     if (block.type === 'text' && block.text) {
