@@ -38,7 +38,10 @@ export class TripToolsService {
         checkIn: readString(args['checkIn']),
         checkOut: readString(args['checkOut']),
         guests: readNumber(args['guests'], 2),
-        maxNightlyPrice: args['maxNightlyPrice'] ? readNumber(args['maxNightlyPrice']) : undefined,
+        maxNightlyPrice:
+          args['maxNightlyPrice'] === undefined || args['maxNightlyPrice'] === null
+            ? undefined
+            : readNumber(args['maxNightlyPrice']),
       }),
     [REQUEST_TAXI_ESTIMATE]: (args) => ({
       ...this.booking.requestTaxi({

@@ -12,6 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { BookingService } from '../../shared/data-access/booking/booking.service';
 import { TripPlanService } from '../../shared/data-access/trip-plan/trip-plan.service';
 import { StayOffer } from '../../shared/data-access/booking/flights.model';
+import { toIsoDate } from '../../shared/utils/date.utils';
 import { I18nService } from '../../core/i18n/i18n.service';
 import { findArrivalCity, TAXI_AIRPORT_CITIES } from '../taxi/taxi.model';
 
@@ -67,8 +68,8 @@ export class Stays {
     const value = this.form.getRawValue();
     this.booking.searchStays({
       city: value.city,
-      checkIn: this.toIsoDate(value.checkIn),
-      checkOut: this.toIsoDate(value.checkOut),
+      checkIn: toIsoDate(value.checkIn),
+      checkOut: toIsoDate(value.checkOut),
       guests: value.guests,
       maxNightlyPrice: value.maxNightlyPrice ?? undefined,
     });
@@ -85,10 +86,5 @@ export class Stays {
       this.i18n.t('common.gotIt'),
       { duration: 4000 },
     );
-  }
-
-  private toIsoDate(date: Date): string {
-    const offset = date.getTimezoneOffset() * 60_000;
-    return new Date(date.getTime() - offset).toISOString().slice(0, 10);
   }
 }

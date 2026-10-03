@@ -7,11 +7,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BookingService } from '../../shared/data-access/booking/booking.service';
 import { TripPlanService } from '../../shared/data-access/trip-plan/trip-plan.service';
 import { FlightOffer } from '../../shared/data-access/booking/flights.model';
+import { toIsoDate } from '../../shared/utils/date.utils';
 import { I18nService } from '../../core/i18n/i18n.service';
 import { TAXI_AIRPORT_CITIES } from '../taxi/taxi.model';
 import { FLIGHT_CABINS } from './flights.model';
@@ -27,7 +27,6 @@ import { FLIGHT_CABINS } from './flights.model';
     MatIconModule,
     MatInputModule,
     MatSelectModule,
-    MatChipsModule,
   ],
   templateUrl: './flights.html',
   styleUrl: './flights.scss',
@@ -66,8 +65,8 @@ export class Flights {
     this.booking.searchFlights({
       origin: value.origin,
       destination: value.destination,
-      departureDate: this.toIsoDate(value.departureDate),
-      returnDate: value.returnDate ? this.toIsoDate(value.returnDate) : undefined,
+      departureDate: toIsoDate(value.departureDate),
+      returnDate: value.returnDate ? toIsoDate(value.returnDate) : undefined,
       passengers: value.passengers,
       cabin: value.cabin,
     });
@@ -90,10 +89,5 @@ export class Flights {
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = String(minutes % 60).padStart(2, '0');
     return `${hours}h ${remainingMinutes}m`;
-  }
-
-  private toIsoDate(date: Date): string {
-    const offset = date.getTimezoneOffset() * 60_000;
-    return new Date(date.getTime() - offset).toISOString().slice(0, 10);
   }
 }

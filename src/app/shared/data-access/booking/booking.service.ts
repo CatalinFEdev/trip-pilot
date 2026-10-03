@@ -52,10 +52,6 @@ function nightsBetween(checkIn: string, checkOut: string): number {
   return Math.max(1, Math.round(ms / 86_400_000));
 }
 
-/**
- * Demo search backend. Replace the bodies with real supplier APIs
- * (Amadeus / Duffel / Booking.com …) without touching the AG-UI layer.
- */
 @Injectable({ providedIn: 'root' })
 export class BookingService {
   readonly lastFlightResults = signal<FlightOffer[]>([]);
@@ -149,8 +145,9 @@ export class BookingService {
       };
     });
 
-    if (criteria.maxNightlyPrice) {
-      offers = offers.filter((o) => o.nightlyPriceEur <= criteria.maxNightlyPrice!);
+    const maxNightlyPrice = criteria.maxNightlyPrice;
+    if (maxNightlyPrice !== undefined) {
+      offers = offers.filter((o) => o.nightlyPriceEur <= maxNightlyPrice);
     }
     offers.sort((a, b) => b.rating - a.rating);
 

@@ -12,12 +12,6 @@ export interface TaxiAirportCity {
   airports: TaxiAirport[];
 }
 
-export interface PickUpSelection {
-  date: Date | null;
-  hour: string;
-  minute: string;
-}
-
 export const TAXI_AIRPORT_CITIES: TaxiAirportCity[] = [
   {
     id: 'amsterdam',

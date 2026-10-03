@@ -10,3 +10,10 @@ export interface StoredTripPlan {
   taxi: TaxiQuote | null;
   savedAt: string;
 }
+
+export interface NavItem {
+  path: string;
+  label: string;
+  icon: string;
+  badge?: string;
+}

@@ -38,6 +38,18 @@ describe('BookingService', () => {
     expect(offers.every((o) => o.nights === 3)).toBe(true);
   });
 
+  it('honours a zero nightly budget', () => {
+    const booking = service();
+    const offers = booking.searchStays({
+      city: 'Porto',
+      checkIn: '2026-06-12',
+      checkOut: '2026-06-15',
+      maxNightlyPrice: 0,
+    });
+
+    expect(offers).toEqual([]);
+  });
+
   it('creates a transient taxi demo estimate', () => {
     const booking = service();
     const quote = booking.requestTaxi({

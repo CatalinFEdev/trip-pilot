@@ -9,8 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { AssistantPanel } from './features/assistant/assistant-panel';
 import { TripPlan } from './features/trip-plan/trip-plan';
 import { I18nService } from './core/i18n/i18n.service';
-import { AppLanguage } from './shared/models/app.model';
-import { NavItem } from './module';
+import {AppLanguage, NavItem} from './shared/models/app.model';
 
 @Component({
   selector: 'app-root',
@@ -28,7 +27,7 @@ import { NavItem } from './module';
     TripPlan,
   ],
   templateUrl: './app.html',
-  styleUrl: './app.scss',
+  styleUrls: ['./app.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {

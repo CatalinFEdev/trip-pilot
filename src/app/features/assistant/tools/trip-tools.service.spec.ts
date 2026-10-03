@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { describe, expect, it } from 'vitest';
-import { BookingService } from '../../../shared/data-access/booking/booking.service';
 import { TripToolsService } from './trip-tools.service';
 import { REQUEST_TAXI_ESTIMATE, SEARCH_FLIGHTS, SEARCH_STAYS } from './trip-tools.schema';
 
@@ -29,6 +28,24 @@ describe('TripToolsService', () => {
 
     expect(result).toHaveLength(5);
     expect(result[0].passengers).toBe(2);
+  });
+
+  it('preserves a zero nightly budget when executing a stay search', async () => {
+    const service = TestBed.configureTestingModule({}).inject(TripToolsService);
+
+    const result = JSON.parse(
+      await service.execute(
+        SEARCH_STAYS,
+        JSON.stringify({
+          city: 'Porto',
+          checkIn: '2026-06-12',
+          checkOut: '2026-06-15',
+          maxNightlyPrice: 0,
+        }),
+      ),
+    );
+
+    expect(result).toEqual([]);
   });
 
   it('returns explicit errors for invalid JSON and unknown tools', async () => {

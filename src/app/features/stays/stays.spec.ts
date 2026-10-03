@@ -31,12 +31,20 @@ describe('Stays', () => {
     };
     const booking = TestBed.inject(BookingService);
     const tripPlan = TestBed.inject(TripPlanService);
-    component.form.controls.maxNightlyPrice.setValue(90);
+
+    component.search();
+    const prices = component.results()
+      .map((offer) => offer.nightlyPriceEur)
+      .sort((left, right) => left - right);
+    const maxNightlyPrice = prices[Math.floor(prices.length / 2)];
+    component.form.controls.maxNightlyPrice.setValue(maxNightlyPrice);
     component.search();
     fixture.detectChanges();
 
     expect(component.searched()).toBe(true);
-    expect(component.results().every((offer) => offer.nightlyPriceEur <= 90)).toBe(true);
+    expect(component.results().length).toBeGreaterThan(0);
+    expect(component.results().every((offer) => offer.nightlyPriceEur <= maxNightlyPrice)).toBe(true);
+    expect(component.results().length).toBeLessThan(prices.length);
     expect((fixture.nativeElement as HTMLElement).querySelectorAll('.stay')).toHaveLength(
       component.results().length,
     );

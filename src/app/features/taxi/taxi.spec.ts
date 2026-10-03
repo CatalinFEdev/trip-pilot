@@ -59,9 +59,9 @@ describe('Taxi', () => {
           arrivalCity: { value: string; setValue: (value: string) => void };
           airport: { setValue: (value: string) => void };
           dropOffAddress: { setValue: (value: string) => void };
-          pickUpDate: { setValue: (value: Date) => void };
-          pickUpHour: { setValue: (value: string) => void };
-          pickUpMinute: { setValue: (value: string) => void };
+          pickUpDate: { setValue: (value: Date) => void; value: Date | null };
+          pickUpHour: { setValue: (value: string) => void; value: string };
+          pickUpMinute: { setValue: (value: string) => void; value: string };
           passengers: { setValue: (value: number) => void };
         };
       };
@@ -89,6 +89,9 @@ describe('Taxi', () => {
     expect(booking.taxiWaitlist()[0].pickUpTime).toBe('2026-10-03T14:30');
     expect(tripPlan.taxi()).toEqual(booking.taxiWaitlist()[0]);
     expect(component.arrivalCityId()).toBe('');
+    expect(controls.pickUpDate.value).toEqual(new Date(2026, 9, 3));
+    expect(controls.pickUpHour.value).toBe('14');
+    expect(controls.pickUpMinute.value).toBe('30');
     expect((fixture.nativeElement as HTMLElement).textContent).toContain('Praça do Comércio');
     expect(TestBed.inject(MatSnackBar).open).toHaveBeenCalled();
   });

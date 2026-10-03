@@ -11,7 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { BookingService } from '../../shared/data-access/booking/booking.service';
 import { TripPlanService } from '../../shared/data-access/trip-plan/trip-plan.service';
 import { I18nService } from '../../core/i18n/i18n.service';
-import { PickUpSelection, findArrivalCity, TAXI_AIRPORT_CITIES } from './taxi.model';
+import { findArrivalCity, TAXI_AIRPORT_CITIES } from './taxi.model';
 
 @Component({
   selector: 'tp-taxi',
@@ -72,11 +72,6 @@ export class Taxi {
       [Validators.required, Validators.min(1)],
     ],
   });
-  private readonly pickUpSelection = signal<PickUpSelection>({
-    date: null,
-    hour: '',
-    minute: '',
-  });
 
   protected changeArrivalCity(cityId: string): void {
     this.arrivalCityId.set(cityId);
@@ -99,7 +94,6 @@ export class Taxi {
       pickUpMinute,
       ...request
     } = value;
-    this.pickUpSelection.set({ date: pickUpDate, hour: pickUpHour, minute: pickUpMinute });
     const city = this.airportCities.find((option) => option.id === arrivalCity);
     const airport = city?.airports.find((option) => option.code === airportCode);
     if (!city || !airport || !pickUpDate) {
@@ -124,9 +118,9 @@ export class Taxi {
       arrivalCity: this.initialArrivalCity?.id ?? '',
       airport: this.initialArrivalCity?.airports[0]?.code ?? '',
       dropOffAddress: this.initialDropOffAddress,
-      pickUpDate: this.pickUpSelection().date,
-      pickUpHour: this.pickUpSelection().hour,
-      pickUpMinute: this.pickUpSelection().minute,
+      pickUpDate,
+      pickUpHour,
+      pickUpMinute,
       passengers: this.tripPlan.flight()?.passengers ?? 1,
     });
     this.arrivalCityId.set(this.initialArrivalCity?.id ?? '');
